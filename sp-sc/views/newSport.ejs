@@ -12,18 +12,37 @@
 </head>
 
 <body>
-    <h1>Select a Sport</h1>
-    <form method="post" action="/sport">
-        <label for="sport">Choose a sport:</label>
-        <select name="sport" id="sport">
-            <option value="football">Football</option>
-            <option value="basketball">Basketball</option>
-            <option value="volleyball">Volleyball</option>
-            <option value="tennis">Tennis</option>
-        </select>
-        <button type="submit">Submit</button>
-        <button><a href="/index.ejs">Go back</a></button>
-    </form>
+    <div class="grid grid-cols-6">
+        <div class="col-start-2 col-span-4">
+          <div class="border rounded-lg p-4 bg-white">
+            <h1 class="text-2xl font-medium text-gray-900 mb-4">Add New Sport</h1>
+            <form method="post" action="/newSport" class="flex flex-col gap-4">
+              <label for="sport" class="text-gray-900">Choose a sport:</label>
+              <div class="relative">
+                <select name="sport" id="sport" class="py-2 px-4 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  <option value="football">Football</option>
+                  <option value="Crickate">Crickate</option>
+                  <option value="basketball">Basketball</option>
+                  <option value="volleyball">Volleyball</option>
+                  <option value="tennis">Tennis</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 13l-5-5h10l-5 5z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              <div class="flex justify-between">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Submit</button>
+                <button class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                  <a href="/" class="text-gray-700">Go back</a>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
 </body>
 
 </html>

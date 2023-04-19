@@ -14,10 +14,10 @@
 
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
-            <p class="py-2" > <a class=" text-green-400" href="/newSession">Create New Session:</a></p>
-            <p class="py-2"><a class=" text-green-400" href="/sessions">View Sessions</a></p>
+            <p class="py-2" > <a class=" text-green-400" href="/newSession/<%= sport %>">Create New Session:</a></p>
+            
 
-            <h1 class="text-2xl font-bold mb-4">Sessions for <%= sport %></h1>
+            <h1 class="text-2xl font-bold mb-4 capitalize">Sessions for <%= sport %></h1>
 
 <table class="border-collapse w-full">
   <thead>
@@ -30,17 +30,19 @@
   </thead>
   <tbody>
     <% sessions.forEach(session => { %>
-      <% if (session.sport === sport) { %>
+      <% // if (session.sport === sport) { %>
         <tr class="border-b border-gray-400">
           <td class="py-3 px-4 text-sm border-b border-gray-600"><%= session.date %></td>
           <td class="py-3 px-4 text-sm border-b border-gray-600"><%= session.place %></td>
           <td class="py-3 px-4 text-sm border-b border-gray-600"><%= session.playerName %></td>
           <td class="py-3 px-4 text-sm border-b border-gray-600"><%= session.totalPlayers %></td>
         </tr>
-      <% } %>
+      <%// } %>
     <% }); %>
   </tbody>
 </table>
+<button class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+  <a href="/" class="text-gray-700">Go back</a>
 
         </div>
     </div>

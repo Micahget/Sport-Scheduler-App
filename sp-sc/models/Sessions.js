@@ -25,9 +25,27 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     // method to get all sessions 
-    static getSessions() {
+    static getEverySessions() {
       return this.findAll();
     }
+    // method to get as session by its sport name
+    static getSessionsBySport(sport) {
+      return this.findAll({
+        where: {
+          sport: sport
+        }
+      })
+    }
+
+    // method to delete sessions by its sport
+    static deleteSessionsBySport(sport) {
+      return this.destroy({
+        where: {
+          sport: sport
+        }
+      })
+    }
+    
   }
   session.init({
     date: DataTypes.DATEONLY,

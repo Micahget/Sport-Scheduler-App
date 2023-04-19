@@ -26,7 +26,7 @@ app.set('view engine', 'ejs')
 app.get('/', async (request, response) => {
     // use try catch to catch any errors
     
-        const sessions = await Sessions.getSessions()
+        const sessions = await Sessions.getEverySessions()
         console.log(sessions)
 
         if(request.accepts('html')){
@@ -43,41 +43,54 @@ app.get('/', async (request, response) => {
 })
 
 // when newSession is called, render the newSession page
-app.get('/newSession', (request, response) => {
-    response.render('newSession')
+app.get('/newSession/:sport', (request, response) => {
+    const sport = request.params.sport
+    console.log(sport)
+        if(request.accepts('html')){
+            response.render('newSession', {
+                title: 'newSession',
+                sport: sport,
+            })
+        } else {
+            // if the request is not html, send a json response
+            response.json({
+                sport: sport
+            })
+        }
+       
+})
+
+
+// now when the user clicks on the submit button, we want to add the session to the database
+app.post('/newSession', async (request, response) => {
+    // use try catch to catch any errors
+    const sport = request.body.sport
+    try {
+        const session = await Sessions.addSession({
+            date: request.body.date,
+            place: request.body.place,
+            playerName: request.body.playerName,
+            totalPlayers: request.body.totalPlayers,
+            sport : sport,
+        })
+        console.log(session)
+        // redirect to the sessions page
+        return response.redirect('/sports/' + sport)
+    } catch (error) {
+        
+        console.log(error)
+    }
+
+// fivve india names: raj kumar, rahul, ravi, ramesh, rakesh
 })
 
 
 
-/*pp.get("/todos", connectEnsureLogin.ensureLoggedIn(), async function (request, response) {
-  const userId = request.user.id;
-  const overdue = await Todo.overdue(userId);
-  const dueToday = await Todo.dueToday(userId);
-  const dueLater = await Todo.dueLater(userId);
-  const completedItem = await Todo.completedItem(userId);
-
-  if (request.accepts("html")) {
-    response.render("todos", {
-      title: "Todo Application",
-      overdue,
-      dueToday,
-      dueLater,
-      completedItem,
-    });
-  } else {
-    response.json({
-      overdue,
-      dueToday,
-      dueLater,
-      completedItem,
-    });
-  }
-});*/
 // taking the above code as a referece give me a get method to get all the sessions and render them in the sessions page
 app.get('/sessions', async (request, response) => {
     // use try catch to catch any errors
     
-        const sessions = await Sessions.getSessions()
+        const sessions = await Sessions.getEverySessions()
         console.log(sessions)
 
         if(request.accepts('html')){
@@ -95,38 +108,25 @@ app.get('/sessions', async (request, response) => {
 
 
 
-// now when the user clicks on the submit button, we want to add the session to the database
-app.post('/newSession', async (request, response) => {
-    // use try catch to catch any errors
-    try {
-        const session = await Sessions.addSession({
-            date: request.body.date,
-            place: request.body.place,
-            playerName: request.body.playerName,
-            totalPlayers: request.body.totalPlayers,
-            sport : request.body.sport,
-        })
-        console.log(session)
-        // redirect to the sessions page
-        return response.redirect('/')
-    } catch (error) {
-        console.log(error)
-    }
-
-
-})
 
 // lets render sport.ejs file
 app.get('/newSport', (request, response) => {
     response.render('newSport')
 })
 
-// get the respose from the sport.ejs file
+// add new sport to the database
 app.post('/newSport', async (request, response) => {
-    // get the value of the sport name
-    const sportName = request.body.sport;
-    console.log(sportName)
-    response.send(`You selected ${sportName}`); // this will send the selected sport to the browser. to be exact it will send the selected sport to the sport.ejs file
+    // here we will add a row of sport to sports table
+    try{
+        const sport = await Sessions.addSession({
+            sport: request.body.sport,
+        })
+        console.log(sport)
+        return response.redirect('/')
+    }
+    catch(error){
+        console.log(error)
+    }
 })
 
 // render the sport.ejs file with detail of sessions sports/name of sport from the database
@@ -136,14 +136,14 @@ app.get( '/sports/:sport' , async (request, response) => {
     const sport = request.params.sport
     console.log(sport)
 
-        const sessions = await Sessions.getSessions()
+        const sessions = await Sessions.getSessionsBySport(sport)
         console.log(sessions)
 
         if(request.accepts('html')){
             response.render('sports', {
                 title: 'sports',
                 sessions: sessions,
-                sport: sport
+                sport: sport,
             })
         } else {
             response.json({
@@ -158,19 +158,5 @@ app.get('/sports', (request, response) => {
     response.render('sports')
 })
 
-// lets edit the sessions
-app.put('/session/:id', (request, response) => {
-    const id = request.params.id
-    const session = request.body
-    response.send(`Editing session: ${id} to be ${session}`)
-}
-)
-
-// lets delete the sessions
-app.delete('/session/:id', (request, response) => {
-    const id = request.params.id
-    response.send(`Deleting session: ${id}`)
-}
-)
 
 module.exports = app
