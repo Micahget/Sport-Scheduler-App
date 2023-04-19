@@ -55,6 +55,21 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
 
+    // method to update sessions by its id
+    static updateSessionById(id, { date, place, playerName, totalPlayers, sport }) {
+      return this.update({
+        date: date,
+        place: place,
+        playerName: playerName,
+        totalPlayers: totalPlayers,
+        sport: sport,
+      }, {
+        where: {
+          id: id
+        }
+      })
+    }
+
   }
   session.init({
     date: DataTypes.DATEONLY,

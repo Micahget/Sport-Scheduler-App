@@ -204,4 +204,48 @@ app.delete( '/sports/:id' , async (request, response) => {
 
 
 
+// when updateSession is called, render the newSession page by its id for the sake of updating
+app.get('/updateSession/:sport/:id', (request, response) => {
+    const id = request.params.id
+    const sport = request.params.sport
+    console.log("geaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaat")
+    console.log(id)
+        if(request.accepts('html')){
+            response.render('updateSession', {
+                title: 'updateSession',
+                id: id,
+                sport: sport,
+            })
+        } else {
+            // if the request is not html, send a json response
+            response.json({
+                sport: sport,
+                id: id
+            })
+        }
+       
+})
+
+
+// update a session from the database by id
+app.post('/updateSession/:id' , async (request, response) => {// the form has method put and action updateSession but I says cannot get / updateSession. why?  I am using put method in the form. To fix 
+    console.log("Updateeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+    const {date, place, playerName, totalPlayers} = request.body
+    const id = request.params.id
+    const sport = request.body.sport
+    console.log("Updateeeeeeeeeeeeeeeeeeeeeeeeeeeeee", id)
+    try{
+        const updated = await Sessions.updateSessionById(id, {date, place, playerName, totalPlayers, sport})
+        console.log("Updateeeeeeeeeeeeeeeeeeeeeeeeeeeeee", updated)
+        return response.redirect(`/sports/${sport}`)
+    }
+    catch(error){
+        console.log(error);
+        return response.status(422).json(error);
+    }
+})
+
+
+
+
 module.exports = app

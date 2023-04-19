@@ -18,24 +18,28 @@
           'Content-Type': 'application/json'
         },
       }).then((result) => {
-        window.location.reload()
+        //redirect the page to updateSession
+        if (result.ok) {
+          window.location.reload()
+        }
       }).catch((err) => console.error(err))
     }
-    function deleteTodo(id) {
-            fetch(`/todos/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    _csrf: token
-                })
-            }).then(res => {
-                if (res.ok) {
-                    window.location.reload()
-                }
-            }).catch((err) => console.error(err))
+    
+      // update session by its id
+    function updateSession(id) {
+      fetch(`/updateSession/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }).then((result) => {
+        if (result.ok) {
+          window.location.reload()
         }
+      }).catch((err) => console.error(err))
+    }
+
+
 
   </script>
 </head>
@@ -90,7 +94,9 @@
                %>
               <% //if (session._id) { %>
               <td class="py-3 px-4 text-sm border-b border-gray-600 "><a
-                  href="/editSession/<%= session.id %>">Edit</a></td>
+                  href="/updateSession/<%= session.sport %>/<%= session.id %>"
+            
+                   onclick="updateSession('<%= session.id %>')">Edit</a></td>
               <td class="py-3 px-4 text-sm border-b border-gray-600"><a href=""
                   onclick="deleteSession('<%= session.id %>')">Delete:'<%= session.id %>' </a></td>
               <% //} %>
