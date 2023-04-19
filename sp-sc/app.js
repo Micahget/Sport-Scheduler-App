@@ -17,9 +17,29 @@ app.set("views", path.join(__dirname, "views")); // this is the path to the view
 // set view engine
 app.set('view engine', 'ejs')
 
-app.get('/', (request, response) => {
-    // render the index page
-    response.render('index', { title: 'Sport Scheduler' })
+// app.get('/', (request, response) => {
+//     // render the index page
+//     response.render('index', { title: 'Sport Scheduler' })
+// })
+
+// render / with the index page and sessions together
+app.get('/', async (request, response) => {
+    // use try catch to catch any errors
+    
+        const sessions = await Sessions.getSessions()
+        console.log(sessions)
+
+        if(request.accepts('html')){
+            response.render('index', {
+                title: 'index',
+                sessions: sessions,
+            })
+        } else {
+            response.json({
+                sessions: sessions
+            })
+        }
+       
 })
 
 // when newSession is called, render the newSession page
@@ -43,7 +63,6 @@ app.get('/newSession', (request, response) => {
       dueToday,
       dueLater,
       completedItem,
-      csrfToken: request.csrfToken(),
     });
   } else {
     response.json({
@@ -84,7 +103,8 @@ app.post('/newSession', async (request, response) => {
             date: request.body.date,
             place: request.body.place,
             playerName: request.body.playerName,
-            totalPlayers: request.body.totalPlayers
+            totalPlayers: request.body.totalPlayers,
+            sport : request.body.sport,
         })
         console.log(session)
         // redirect to the sessions page
@@ -95,7 +115,48 @@ app.post('/newSession', async (request, response) => {
 
 
 })
-// so the form should have a method of post and an action of /newSession
+
+// lets render sport.ejs file
+app.get('/newSport', (request, response) => {
+    response.render('newSport')
+})
+
+// get the respose from the sport.ejs file
+app.post('/newSport', async (request, response) => {
+    // get the value of the sport name
+    const sportName = request.body.sport;
+    console.log(sportName)
+    response.send(`You selected ${sportName}`); // this will send the selected sport to the browser. to be exact it will send the selected sport to the sport.ejs file
+})
+
+// render the sport.ejs file with detail of sessions sports/name of sport from the database
+app.get( '/sports/:sport' , async (request, response) => {
+    // use try catch to catch any errors
+    // get the param and send it with the response
+    const sport = request.params.sport
+    console.log(sport)
+
+        const sessions = await Sessions.getSessions()
+        console.log(sessions)
+
+        if(request.accepts('html')){
+            response.render('sports', {
+                title: 'sports',
+                sessions: sessions,
+                sport: sport
+            })
+        } else {
+            response.json({
+                sessions: sessions
+            })
+        }
+       
+})    
+
+// lets render sport.ejs file
+app.get('/sports', (request, response) => {
+    response.render('sports')
+})
 
 // lets edit the sessions
 app.put('/session/:id', (request, response) => {

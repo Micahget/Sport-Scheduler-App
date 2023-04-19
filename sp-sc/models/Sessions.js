@@ -14,12 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
     // method to create sessions
-    static addSession({ date, place, playerName, totalPlayers }) {
+    static addSession({ date, place, playerName, totalPlayers, sport }) {
       return this.create({
         date: date,
         place: place,
         playerName: playerName,
-        totalPlayers: totalPlayers
+        totalPlayers: totalPlayers,
+        sport: sport,
       })
     }
 
@@ -32,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     date: DataTypes.DATEONLY,
     place: DataTypes.STRING,
     playerName: DataTypes.STRING,
-    totalPlayers: DataTypes.INTEGER
+    totalPlayers: DataTypes.INTEGER,
+    sport: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Sessions',
