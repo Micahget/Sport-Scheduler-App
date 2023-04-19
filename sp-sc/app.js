@@ -27,7 +27,7 @@ app.get('/', async (request, response) => {
     // use try catch to catch any errors
     
         const sessions = await Sessions.getEverySessions()
-        console.log(sessions)
+        // console.log(sessions)
 
         if(request.accepts('html')){
             response.render('index', {
@@ -73,7 +73,7 @@ app.post('/newSession', async (request, response) => {
             totalPlayers: request.body.totalPlayers,
             sport : sport,
         })
-        console.log(session)
+        // console.log(session)
         // redirect to the sessions page
         return response.redirect('/sports/' + sport)
     } catch (error) {
@@ -91,7 +91,7 @@ app.get('/sessions', async (request, response) => {
     // use try catch to catch any errors
     
         const sessions = await Sessions.getEverySessions()
-        console.log(sessions)
+        // console.log(sessions)
 
         if(request.accepts('html')){
             response.render('sessions', {
@@ -137,7 +137,7 @@ app.get( '/sports/:sport' , async (request, response) => {
     console.log(sport)
 
         const sessions = await Sessions.getSessionsBySport(sport)
-        console.log(sessions)
+        // console.log(sessions)
 
         if(request.accepts('html')){
             response.render('sports', {
@@ -157,6 +157,51 @@ app.get( '/sports/:sport' , async (request, response) => {
 app.get('/sports', (request, response) => {
     response.render('sports')
 })
+
+// app.delete("/todos/:id", async function (request, response) {
+//     console.log("We have to delete a Todo with ID: ", request.params.id);
+//     const userId = request.user.id;
+//     // FILL IN YOUR CODE HERE
+//     try {
+//       await Todo.remove(request.params.id, userId);
+//       return response.json({ success: true });
+//     } catch (error) {
+//       console.log(error);
+//       return response.status(422).json(error);
+//     }
+//   });
+//delete a sport from the database whcih will delete every session which have same sport name
+app.delete( '/' , async (request, response) => {
+    const sport = request.body.sport
+    console.log(sport)
+    try{
+        const deleted = await Sessions.deleteSessionsBySport(sport)
+        console.log("Deleteeeeeeeeeeeeeeeeeeeeeeeeeeeeee", deleted)
+        return response.json({ success: true });
+
+    }
+    catch(error){
+        console.log(error);
+        return response.status(422).json(error);
+    }
+})
+
+// delete a session from the database by id
+app.delete( '/sports/:id' , async (request, response) => {
+    const id = request.params.id
+    console.log("yeeeeeeeeeeeeeeeeeeeeeee", id)
+    try{
+        const deleted = await Sessions.deleteSessionById(id)
+        console.log("Deleteeeeeeeeeeeeeeeeeeeeeeeeeeeeee", deleted)
+        return response.json({ success: true });
+
+    }
+    catch(error){
+        console.log(error);
+        return response.status(422).json(error);
+    }
+})
+
 
 
 module.exports = app

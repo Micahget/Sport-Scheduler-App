@@ -45,7 +45,16 @@ module.exports = (sequelize, DataTypes) => {
         }
       })
     }
-    
+
+    // method to delete sessions by its id
+    static deleteSessionById(id) {
+      return this.destroy({
+        where: {
+          id: id
+        }
+      })
+    }
+
   }
   session.init({
     date: DataTypes.DATEONLY,

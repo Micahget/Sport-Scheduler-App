@@ -7,8 +7,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <title>Sport Scheduer</title>
+    <script>
+        //  function deleteTodo(id) {
+        //     fetch(`/todos/${id}`, {
+        //         method: 'DELETE',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({
+        //             _csrf: token
+        //         })
+        //     }).then(res => {
+        //         if (res.ok) {
+        //             window.location.reload()
+        //         }
+        //     }).catch((err) => console.error(err))
+        // }
+        // a function to fetch the value of sport from the url and pass it to server to be deleted
+        function deleteSport(sport) {
+            console.log(sport)
+            fetch('/', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    sport: sport
+                })
+
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload()
+                }
+            }).catch((err) => console.error(err))
+
+        }
+
+    </script>
 </head>
 
 <body>
@@ -17,35 +54,39 @@
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- //include ('header.ejs') %>
-      <div class="border rounded-lg p-4 bg-white">
-            <p class="py-2 text-2xl font-bold">Welcome to Sports Scheduler</p>
-            <p class="py-2"><a class="text-green-400" href="/newSport">Add Sport</a></p>
-            <p class="py-2"><a class=" text-green-400" href="/sessions">View Sessions</a></p>
-    
-          
-                <h2 class="text-lg font-medium text-gray-900 mb-2">List of Sports</h2>
-                <ul class="flex flex-col gap-2">
-                    <% 
-                    const sports = sessions.map(session => session.sport);
-                    const uniqueSports = [...new Set(sports.filter(Boolean))];
-                    uniqueSports.forEach(sport => { %>
-                        <a href="/sports/<%= sport %>" class="flex items-center justify-between">
-                            <div class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded capitalize w-auto">
-                              <%= sport %>
+                <div class="border rounded-lg p-4 bg-white">
+                    <p class="py-2 text-2xl font-bold">Welcome to Sports Scheduler</p>
+                    <p class="py-2"><a class="text-green-400" href="/newSport">Add Sport</a></p>
+                    <p class="py-2"><a class=" text-green-400" href="/sessions">View Sessions</a></p>
+
+                    <h2 class="text-lg font-medium text-gray-900 mb-2">List of Sports</h2>
+                    <div class="flex flex-col gap-2">
+                        <% const sports=sessions.map(session=> session.sport);
+                            const uniqueSports = [...new Set(sports.filter(Boolean))];
+                            uniqueSports.forEach(sport => { %>
+                            <a href="/sports/<%= sport %>" class="flex items-center justify-between">
+                                <div
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded capitalize w-auto">
+                                    <%= sport %>
+                                </div>
+
+                            </a>
+                            <div class=" flex ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+                                onclick="deleteSport('<%= sport %>')">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                </svg>
                             </div>
-                            <div class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                              </svg>
-                            </div>
-                          </a>
-                    <% }); %>
-                </ul>
-            </div>
+                            <% }); %>
+                        </div>
+
+                </div>
         </div>
     </div>
-    
+
+
 </body>
 
 </html>

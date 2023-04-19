@@ -2,50 +2,111 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/styles.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <title>To-do Manager</title>
-</head><body>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <title>To-do Manager</title>
+  <script>
+    // method to delete session by its id by fetching the delete route
+    function deleteSession(id) {
+      fetch(`/sports/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }).then((result) => {
+        window.location.reload()
+      }).catch((err) => console.error(err))
+    }
+    function deleteTodo(id) {
+            fetch(`/todos/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    _csrf: token
+                })
+            }).then(res => {
+                if (res.ok) {
+                    window.location.reload()
+                }
+            }).catch((err) => console.error(err))
+        }
+
+  </script>
+</head>
+
+<body>
 
 
-    <div class="grid grid-cols-6">
-        <div class="col-start-3 col-span-2">
-            <p class="py-2" > <a class=" text-green-400" href="/newSession/<%= sport %>">Create New Session:</a></p>
-            
+  <div class="grid grid-cols-6">
+    <div class="col-start-2 col-span-4">
+      <p class="py-2"> <a class=" text-green-400" href="/newSession/<%= sport %>">Create New Session:</a></p>
 
-            <h1 class="text-2xl font-bold mb-4 capitalize">Sessions for <%= sport %></h1>
 
-<table class="border-collapse w-full">
-  <thead>
-    <tr>
-      <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Date</th>
-      <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Place</th>
-      <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Player Name</th>
-      <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Total Players</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% sessions.forEach(session => { %>
-      <% // if (session.sport === sport) { %>
-        <tr class="border-b border-gray-400">
-          <td class="py-3 px-4 text-sm border-b border-gray-600"><%= session.date %></td>
-          <td class="py-3 px-4 text-sm border-b border-gray-600"><%= session.place %></td>
-          <td class="py-3 px-4 text-sm border-b border-gray-600"><%= session.playerName %></td>
-          <td class="py-3 px-4 text-sm border-b border-gray-600"><%= session.totalPlayers %></td>
-        </tr>
-      <%// } %>
-    <% }); %>
-  </tbody>
-</table>
-<button class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
-  <a href="/" class="text-gray-700">Go back</a>
+      <h1 class="text-2xl font-bold mb-4 capitalize">Sessions for <%= sport %>
+      </h1>
 
-        </div>
+      <table class="border-collapse w-auto">
+        <thead>
+          <tr>
+            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Date
+            </th>
+            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Place
+            </th>
+            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Player
+              Name</th>
+            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Total
+              Players</th>
+            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Edit
+            </th>
+            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Delete
+            </th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <% sessions.forEach(session=> {
+            if (session.totalPlayers && session.place) { // Only display sessions with non-empty totalPlayers and place
+          %>
+            <tr class="border-b border-gray-400">
+              <td class="py-3 px-4 text-sm border-b border-gray-600">
+                <%= session.date %>
+              </td>
+              <td class="py-3 px-4 text-sm border-b border-gray-600">
+                <%= session.place %>
+              </td>
+              <td class="py-3 px-4 text-sm border-b border-gray-600">
+                <%= session.playerName %>
+              </td>
+              <td class="py-3 px-4 text-sm border-b border-gray-600">
+                <%= session.totalPlayers %>
+              </td>
+              <% // if session id exists then show edit and delete button
+               %>
+              <% //if (session._id) { %>
+              <td class="py-3 px-4 text-sm border-b border-gray-600 "><a
+                  href="/editSession/<%= session.id %>">Edit</a></td>
+              <td class="py-3 px-4 text-sm border-b border-gray-600"><a href=""
+                  onclick="deleteSession('<%= session.id %>')">Delete:'<%= session.id %>' </a></td>
+              <% //} %>
+            </tr>
+          <% 
+            } // End of if statement
+          }); %>
+        </tbody>
+        
+      </table>
+      <button
+        class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 m-2">
+        <a href="/" class="text-gray-700">Go back</a>
+
     </div>
+  </div>
 </body>
 
 </html>
