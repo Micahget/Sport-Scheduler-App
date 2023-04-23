@@ -110,14 +110,6 @@
             </th>
             <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Place
             </th>
-            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Player
-              Name</th>
-            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Total
-              Players</th>
-            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Edit
-            </th>
-            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Delete
-            </th>
             <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">View
               Detail
             </th>
@@ -135,17 +127,6 @@
               <td class="py-3 px-4 text-sm border-b border-gray-600">
                 <%= session.place %>
               </td>
-              <td class="py-3 px-4 text-sm border-b border-gray-600">
-                <%= session.playerName %>
-              </td>
-              <td class="py-3 px-4 text-sm border-b border-gray-600">
-                <%= session.totalPlayers %>
-              </td>
-              <td class="py-3 px-4 text-sm border-b border-gray-600 "><a
-                  href="/updateSession/<%= session.sport %>/<%= session.id %>"
-                  onclick="updateSession('<%= session.id %>')">Edit</a></td>
-              <td class="py-3 px-4 text-sm border-b border-gray-600"><a href=""
-                  onclick="deleteSession('<%= session.id %>')">Delete:'<%= session.id %>' </a></td>
               <td class="py-3 px-4 text-sm border-b border-gray-600">
                 <%= session.totalPlayers %>
                  <a href="/sessionDetail/<%= session.id %>"> <button id="<%= session.id %>" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-4">

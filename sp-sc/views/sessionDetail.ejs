@@ -8,33 +8,34 @@
   <link rel="stylesheet" href="./css/styles.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    /*// method to update the session by adding the name
-    function addPlayer(id) {
-      // player-<%= //session.id %>
-      console.log("CCCCCCCCCCCCCCCCCCCCCcclicked")
-      const input = document.getElementById(`player-${id}`).value;
-      console.log("value: " + input)
-      const name = document.getElementById(`player-${id}`).name;
-      console.log("name: " + name)
-      session.playerName= session.playerName + ', ' + input;
-      console.log("clicked: " + name, "and: " + id)
-      fetch(`/session/${id}`, {
-        method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    playerName: session.playerName,
-
-                })
-            }).then(res => {
-                if (res.ok) {
-                    window.location.reload()
-                }
-            })
-                .catch((err) => console.error(err))
+    function deleteSession(id) {
+      // console.log(id)
+      fetch(`/sports/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }).then((result) => {
+        //redirect the page to updateSession
+        if (result.ok) {
+          window.location.href = '/sports/<%= session.sport %>'
+        }
+      }).catch((err) => console.error(err))
     }
-    */
+
+    // update session by its id
+    function updateSession(id) {
+      fetch(`/updateSession/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }).then((result) => {
+        if (result.ok) {
+          window.location.reload()
+        }
+      }).catch((err) => console.error(err))
+    }
     function addPlayer(sessionId, name) {
       const inputId = `player-${sessionId}`;
       const inputValue = document.getElementById(inputId).value;
@@ -59,7 +60,7 @@
     }
 
     function deletePlayer(sessionId, name, totalNames) {
-      
+
       const arrayOfPlayers = totalNames.split(",");
       const index = arrayOfPlayers.indexOf(name);
       let newName = arrayOfPlayers.splice(index, 1); // remove the player
@@ -89,19 +90,14 @@
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-bold text-gray-800 mb-6">Session Details</h1>
       <div class="flex items-center space-x-2">
-        <a href="#" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-gray-800 text-sm">Edit</a>
-        <a href="#" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-white text-sm">Delete</a>
+        <a  href="/updateSession/<%= session.sport %>/<%= session.id %>" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-gray-800 text-sm">Edit</a>
+        <a href="#"onclick="deleteSession('<%= session.id %>')" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-white text-sm">Delete</a>
       </div>
     </div>
     <p class="text-gray-700">This is <span class="text-green-400">
         <%= session.sport %>
       </span> session</p>
-    <div class="mt-4 flex items-center space-x-2">
-      <button class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md text-white text-sm">Join Session</button>
-      <p class="text-gray-700">The session will start at <span class="text-green-400">
-          <%= session.date %>
-        </span></p>
-    </div>
+    
     <div class="mt-4 flex items-center space-x-2">
       <p class="text-gray-700">The session will be held at</p>
       <p class="font-bold text-gray-800">

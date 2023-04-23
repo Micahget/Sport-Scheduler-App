@@ -244,7 +244,7 @@ app.post('/updateSession/:id' , async (request, response) => {// the form has me
     try{
         const updated = await Sessions.updateSessionById(id, {date, place, playerName, totalPlayers, sport})
         console.log("Updateeeeeeeeeeeeeeeeeeeeeeeeeeeeee", updated)
-        return response.redirect(`/sports/${sport}`)
+        return response.redirect(`/sessionDetail/${id}`)
     }
     catch(error){
         console.log(error);
