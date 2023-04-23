@@ -141,16 +141,19 @@ app.get( '/sports/:sport' , async (request, response) => {
     // use try catch to catch any errors
     // get the param and send it with the response
     const sport = request.params.sport
-    console.log(sport)
-
-        const sessions = await Sessions.getSessionsBySport(sport)
-        // console.log(sessions)
+    // get active Sessions of the sport
+    const activeSession = await Sessions.getActiveSessions(sport)
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",activeSession)
+    const passedSession = await Sessions.getPastSessions(sport)
+    console.log("bbbbbbbbbbb bbbb bbbbbbbbbbbb",passedSession)
+    
 
         if(request.accepts('html')){
             response.render('sports', {
                 title: 'sports',
-                sessions: sessions,
                 sport: sport,
+                activeSession: activeSession,
+                passedSession: passedSession,
             })
         } else {
             response.json({

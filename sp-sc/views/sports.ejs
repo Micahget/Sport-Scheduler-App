@@ -89,7 +89,7 @@
 
   <div class="grid grid-cols-6">
     <div class="col-start-2 col-span-4">
-      <p class="py-2"> <a class=" text-green-400" href="/newSession/<%= sport %>">Create New Session:</a></p>
+      <p class="py-2 font-bold text-lg"> <a class=" text-green-400" href="/newSession/<%= sport %>">Create New Session</a></p>
       <div class="absolute top-2 right-5 mt-2 mr-2 flex ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
       onclick="deleteSport('<%= sport %>')">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -100,44 +100,12 @@
   </div>
 
 
-      <h1 class="text-2xl font-bold mb-4 capitalize">Sessions for <%= sport %>
+      <h1 class="text-3xl font-bold mb-4 capitalize">Sessions for <%= sport %>
       </h1>
-
-      <table class="border-collapse w-auto">
-        <thead>
-          <tr>
-            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Date
-            </th>
-            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Place
-            </th>
-            <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">View
-              Detail
-            </th>
-
-          </tr>
-        </thead>
-        <tbody>
-          <% sessions.forEach(session=> {
-            if (session.totalPlayers && session.place) { // Only display sessions with non-empty totalPlayers and place
-            %>
-            <tr class="border-b border-gray-400">
-              <td class="py-3 px-4 text-sm border-b border-gray-600">
-                <%= session.date %>
-              </td>
-              <td class="py-3 px-4 text-sm border-b border-gray-600">
-                <%= session.place %>
-              </td>
-              <td class="py-3 px-4 text-sm border-b border-gray-600">
-                <%= session.totalPlayers %>
-                 <a href="/sessionDetail/<%= session.id %>"> <button id="<%= session.id %>" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-4">
-                    View
-                  </button></a>
-              </td>
-            </tr>
-            <% } }); %>
-        </tbody>
-
-      </table>
+      <div>
+        <%- include('sport.ejs', {title: "Active Session" , data: activeSession}) %>
+            <%- include('sport.ejs', {title: "Passed Session" , data: passedSession}) %>
+    </div>
       <button
         class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 m-2">
         <a href="/" class="text-gray-700">Go back</a>

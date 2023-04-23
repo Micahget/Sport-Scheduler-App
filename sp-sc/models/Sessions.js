@@ -1,8 +1,6 @@
 /* eslint-disable */
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model, Op } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class session extends Model {
     /**
@@ -45,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       })
     }
-    
+
     // method to delete sessions by its sport
     static deleteSessionsBySport(sport) {
       return this.destroy({
@@ -63,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       })
     }
-     
+
 
     // method to update sessions by its id
     static updateSessionById(id, { date, place, playerName, totalPlayers, sport }) {
@@ -90,7 +88,31 @@ module.exports = (sequelize, DataTypes) => {
         }
       })
     }
-    
+
+    // extract active sessions
+    static getActiveSessions(sport) {
+      return this.findAll({
+        where: {
+          date: {
+            [Op.gt]: new Date(), // after today
+          },
+          sport: sport
+        }
+      })
+    }
+
+    // extract past sessions
+    static getPastSessions(sport) {
+      return this.findAll({
+        where: {
+          date: {
+            [Op.lt]: new Date(), // before today
+          },
+          sport: sport
+        }
+      })
+    }
+
 
   }
   session.init({
