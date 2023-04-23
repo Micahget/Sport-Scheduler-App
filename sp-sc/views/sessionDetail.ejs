@@ -90,14 +90,16 @@
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-bold text-gray-800 mb-6">Session Details</h1>
       <div class="flex items-center space-x-2">
-        <a  href="/updateSession/<%= session.sport %>/<%= session.id %>" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-gray-800 text-sm">Edit</a>
-        <a href="#"onclick="deleteSession('<%= session.id %>')" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-white text-sm">Delete</a>
+        <a href="/updateSession/<%= session.sport %>/<%= session.id %>"
+          class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-gray-800 text-sm">Edit</a>
+        <a href="#" onclick="deleteSession('<%= session.id %>')"
+          class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-white text-sm">Delete</a>
       </div>
     </div>
     <p class="text-gray-700">This is <span class="text-green-400">
         <%= session.sport %>
       </span> session</p>
-    
+
     <div class="mt-4 flex items-center space-x-2">
       <p class="text-gray-700">The session will be held at</p>
       <p class="font-bold text-gray-800">
@@ -123,27 +125,24 @@
                 </span>
                 <% console.log("player: " + arrayOfPlayers[i]) %>
             <!--the button is to delete the player from the session-->
-            <button onclick=" deletePlayer('<%=session.id %>', '<%= arrayOfPlayers[i] %>', '<%= session.playerName %>')" class="hover:text-red-600
-                      outline-none focus:outline-none">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                        <path fill-rule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM6.75 9.25a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"
-                          clip-rule="evenodd" />
-                      </svg>
+                  <button class=" hover:text-red-600 outline-none focus:outline-none"
+                  onclick=" deletePlayer('<%=session.id %>', '<%= arrayOfPlayers[i] %>', '<%= session.playerName %>')">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                    <path fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM6.75 9.25a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"
+                      clip-rule="evenodd" />
+                  </svg>
 
-                      </button>
+                  </button>
 
               </div>
-
-
-
               <% } %>
                 <% if(session.totalPlayers> arrayOfPlayers.length ) { %>
                   <% // console.log("number or array: ", arrayOfPlayers.length, " and number of players: ", session.totalPlayers) %>
             <div class=" bg-gray-200 flex items-center px-3 py-1 rounded-full space-x-2 text-gray-700">
 
                     <input type="text" placeholder="name" id="player-<%= session.id %>" name="playerName">
-                    <button type="submit" onclick="addPlayer('<%= session.id %>', ' <%= session.playerName %>')"
+                    <button onclick="addPlayer('<%= session.id %>', ' <%= session.playerName %>')"
                       class="hover:text-red-600 outline-none focus:outline-none">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                         <path fill-rule="evenodd"
