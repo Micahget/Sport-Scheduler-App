@@ -9,6 +9,7 @@ app.use(express.urlencoded({ extended: false }));
 
 const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
+
 app.set("views", path.join(__dirname, "views")); // this is the path to the views folder. i need it 
 
 /*
@@ -63,13 +64,19 @@ app.get('/newSession/:sport', (request, response) => {
 
 // now when the user clicks on the submit button, we want to add the session to the database
 app.post('/newSession', async (request, response) => {
-    // use try catch to catch any errors
     const sport = request.body.sport
+    const playerName = request.body.playerName
+    const count = playerName.split(',')
+    if(count.length > request.body.totalPlayers){
+        // this console message will be replaced by a flash message
+        console.log('you have entered more players than the total players')
+        return response.redirect('/newSession/' + sport)
+    }
     try {
-        const session = await Sessions.addSession({
+        await Sessions.addSession({
             date: request.body.date,
             place: request.body.place,
-            playerName: request.body.playerName,
+            playerName: playerName,
             totalPlayers: request.body.totalPlayers,
             sport : sport,
         })
@@ -244,6 +251,43 @@ app.post('/updateSession/:id' , async (request, response) => {// the form has me
         return response.status(422).json(error);
     }
 })
+
+// render the sessionDetail.ejs file with detail of sessions sports/name of sport from the database
+app.get('/sessionDetail/:id' , async (request, response) => {
+    const id = request.params.id
+    const session = await Sessions.getSessionById(id)
+    // console.log("geaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaat")
+    console.log(id)
+        if(request.accepts('html')){
+            response.render('sessionDetail', {
+                title: 'sessionDetail',
+                session: session,
+            })
+        } else {
+            // if the request is not html, send a json response
+            response.json({
+                
+            })
+        }
+    })
+
+    // update a the name of player in the session by recivig id and name from url and add the name with comman to the player name and add it to the database
+    app.put('/session/:id/' , async (request, response) => {
+        const id = request.params.id
+        const name = request.body.playerName
+        console.log("updated naem: ", name)
+        try {
+            const updated = await Sessions.updatePlayerNameById(id, name)
+            return response.json({ success: true });
+        }
+        catch(error){
+            console.log(error);
+            return response.status(422).json(error);
+        }
+    })
+
+
+    
 
 
 

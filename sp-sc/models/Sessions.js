@@ -37,6 +37,15 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
 
+    // method to get a session by its id
+    static getSessionById(id) {
+      return this.findOne({
+        where: {
+          id: id
+        }
+      })
+    }
+    
     // method to delete sessions by its sport
     static deleteSessionsBySport(sport) {
       return this.destroy({
@@ -54,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       })
     }
+     
 
     // method to update sessions by its id
     static updateSessionById(id, { date, place, playerName, totalPlayers, sport }) {
@@ -69,6 +79,18 @@ module.exports = (sequelize, DataTypes) => {
         }
       })
     }
+
+    // update only the name of the player
+    static updatePlayerNameById(id, playerName) {
+      return this.update({
+        playerName: playerName
+      }, {
+        where: {
+          id: id
+        }
+      })
+    }
+    
 
   }
   session.init({

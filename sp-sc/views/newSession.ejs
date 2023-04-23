@@ -28,16 +28,16 @@
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="place" type="text" name="place" required>
           </div>
           <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="playerName">
-              Player Name
-            </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="playerName" type="text" name="playerName" required>
-          </div>
-          <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2" for="totalPlayers">
               Total Players
             </label>
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="totalPlayers" type="number" name="totalPlayers" min="1" required>
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="playerName">
+              Players Name<span class="text-sm text-gray-500 ml-2 font-semibold">(If you want to add more than one player, separate them with a comma)</span>
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="playerName" type="text" name="playerName" required>
           </div>
           <!--get the value of the sport from the url-->
           <input class="hidden"  type="" name="sport" value="<%= sport %>">

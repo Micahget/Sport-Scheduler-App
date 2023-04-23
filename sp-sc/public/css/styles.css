@@ -6,3 +6,6 @@ body{
     line-height: 1.5;
     margin: 0;
 }
+button:hover .join-text {
+    display: inline-block;
+  }
