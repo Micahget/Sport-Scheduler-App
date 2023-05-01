@@ -5,9 +5,12 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="<%= csrfToken %>">
   <link rel="stylesheet" href="./css/styles.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="csrf-token" content="<%= csrfToken %>">
   <script>
+     var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     function deleteSession(id) {
       // console.log(id)
       fetch(`/sports/${id}`, {
@@ -15,6 +18,11 @@
         headers: {
           'Content-Type': 'application/json'
         },
+        body: JSON.stringify({
+          // csrf csrfToken
+          _csrf: token,
+
+        })
       }).then((result) => {
         //redirect the page to updateSession
         if (result.ok) {
@@ -30,6 +38,11 @@
         headers: {
           'Content-Type': 'application/json'
         },
+        body: JSON.stringify({
+          // csrf csrfToken
+          _csrf: token
+
+        })
       }).then((result) => {
         if (result.ok) {
           window.location.reload()
@@ -50,6 +63,7 @@
         },
         body: JSON.stringify({
           playerName: addedName,
+          _csrf: token
         })
       }).then(res => {
         if (res.ok) {
@@ -74,6 +88,7 @@
         },
         body: JSON.stringify({
           playerName: newName,
+          _csrf: token
         })
       }).then(res => {
         if (res.ok) {

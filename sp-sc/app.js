@@ -1,10 +1,17 @@
 /* eslint-disable  */
 const express = require('express')
 const app = express()
+// const csrf = require('csurf')
+var csrf = require("tiny-csrf");
+const cookieParser = require('cookie-parser')
 const { Sessions } = require('./models')
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser( 'shh! this is a secret' ))
+// app.use(csrf({ cookie: true })) // I do not need this because I am using cookie parser and I am passing the secret key to it
+app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
+
 
 
 const path = require("path");
@@ -25,6 +32,7 @@ app.get('/', async (request, response) => {
         response.render('index', {
             title: 'index',
             sessions: sessions,
+            csrfToken: request.csrfToken()
         })
     } else {
         response.json({
@@ -42,6 +50,7 @@ app.get('/newSession/:sport', (request, response) => {
         response.render('newSession', {
             title: 'newSession',
             sport: sport,
+            csrfToken: request.csrfToken()
         })
     } else {
         // if the request is not html, send a json response
@@ -95,6 +104,8 @@ app.get('/sessions', async (request, response) => {
         response.render('sessions', {
             title: 'Sessions',
             sessions: sessions,
+            csrfToken: request.csrfToken()
+
         })
     } else {
         response.json({
@@ -109,8 +120,17 @@ app.get('/sessions', async (request, response) => {
 
 // lets render sport.ejs file
 app.get('/newSport', (request, response) => {
-    response.render('newSport')
+    if (request.accepts('html')) {
+        response.render('newSport', {
+            csrfToken: request.csrfToken()
+        })
+    } else {
+        // if the request is not html, send a json response
+        response.json({
+        })
+    }
 })
+
 
 // add new sport to the database
 app.post('/newSport', async (request, response) => {
@@ -140,6 +160,7 @@ app.get('/sports/:sport', async (request, response) => {
             sport: sport,
             activeSession: activeSession,
             passedSession: passedSession,
+            csrfToken: request.csrfToken()
         })
     } else {
         response.json({
@@ -149,9 +170,9 @@ app.get('/sports/:sport', async (request, response) => {
 
 })
 
-// lets render sport.ejs file
+// lets render sport.ejs file with csrf token
 app.get('/sports', (request, response) => {
-    response.render('sports')
+    response.render('sports', { title: 'sports' , csrfToken: request.csrfToken()})
 })
 
 
@@ -194,6 +215,7 @@ app.get('/updateSession/:sport/:id', (request, response) => {
             title: 'updateSession',
             id: id,
             sport: sport,
+            csrfToken: request.csrfToken()
         })
     } else {
         // if the request is not html, send a json response
@@ -231,6 +253,7 @@ app.get('/sessionDetail/:id', async (request, response) => {
         response.render('sessionDetail', {
             title: 'sessionDetail',
             session: session,
+            csrfToken: request.csrfToken()
         })
     } else {
         // if the request is not html, send a json response

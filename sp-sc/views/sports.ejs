@@ -5,11 +5,14 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="<%= csrfToken %>">
   <link rel="stylesheet" href="./css/styles.css">
   <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="csrf-token" content="<%= csrfToken %>">
 
-  <title>To-do Manager</title>
+  <title>Sport Scheduler</title>
   <script>
+    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     // method to delete session by its id by fetching the delete route
     function deleteSession(id) {
       fetch(`/sports/${id}`, {
@@ -17,6 +20,11 @@
         headers: {
           'Content-Type': 'application/json'
         },
+        body: JSON.stringify({
+          // csrf csrfToken
+          _csrf: token
+
+        })
       }).then((result) => {
         //redirect the page to updateSession
         if (result.ok) {
@@ -32,6 +40,11 @@
         headers: {
           'Content-Type': 'application/json'
         },
+        body: JSON.stringify({
+          // csrf csrfToken
+          _csrf: token
+
+        })
       }).then((result) => {
         if (result.ok) {
           window.location.reload()
@@ -47,7 +60,8 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    sport: sport
+                    sport: sport,
+                    _csrf: token
                 })
 
             }).then(response => {
