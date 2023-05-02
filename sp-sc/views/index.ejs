@@ -6,43 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/styles.css">
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <title>Sport Scheduer</title>
+    
+    <title>To-do Manager</title>
 </head>
 
 <body>
 
 
     <div class="grid grid-cols-6">
+
         <div class="col-start-3 col-span-2">
-            <%- //include ('header.ejs') %>
-                <div class="border rounded-lg p-4 bg-white">
-                    <p class="py-2 text-2xl font-bold">Welcome to Sports Scheduler</p>
-                    <p class="py-2"><a class="text-green-400" href="/newSport">Add Sport</a></p>
-                    <p class="py-2"><a class=" text-green-400" href="/sessions">View Sessions</a></p>
+            <p class="py-2 text-2xl font-bold">Sports Scheduler</p>
+            
 
-                    <h2 class="text-lg font-medium text-gray-900 mb-2">List of Sports</h2>
-                    <div class="flex flex-col gap-2">
-                        <% const sports=sessions.map(session=> session.sport);
-                            const uniqueSports = [...new Set(sports.filter(Boolean))];
-                            uniqueSports.forEach(sport => { %>
-                            <a href="/sports/<%= sport %>" class="flex items-center justify-between">
-                                <div
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded capitalize w-auto">
-                                    <%= sport %>
-                                </div>
+            <p class="py-2">Welcome to Sports Scheduler</p>
+            <p class="py-2" >new Here ? <a class=" text-green-400" href="/signup">sign-up</a></p>
+            <p class="py-2">Already User ? <a class=" text-green-400" href="/login">sign-in</a></p>
 
-                            </a>
-                           
-                            <% }); %>
-                        </div>
-
-                </div>
         </div>
     </div>
-
-
 </body>
 
 </html>

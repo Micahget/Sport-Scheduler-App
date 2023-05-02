@@ -4,11 +4,11 @@ const app = express()
 // const csrf = require('csurf')
 var csrf = require("tiny-csrf");
 const cookieParser = require('cookie-parser')
-const { Sessions } = require('./models')
+const { Sessions, User } = require('./models')
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser( 'shh! this is a secret' ))
+app.use(cookieParser('shh! this is a secret'))
 // app.use(csrf({ cookie: true })) // I do not need this because I am using cookie parser and I am passing the secret key to it
 app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
 
@@ -21,16 +21,58 @@ app.set("views", path.join(__dirname, "views")); // this is the path to the view
 // set view engine
 app.set('view engine', 'ejs')
 
+// render the landing page
+app.get("/", async (request, response) => {
+    response.render("index", {
+        title: "Sport Scheduler",
+        csrfToken: request.csrfToken(),
+    });
+});
+
+// ******************************************SignUp and SignOut****************************************************************************
+// render the login page
+app.get("/signup", function (request, response) {
+    response.render("signup", {
+        title: "Signup",
+        csrfToken: request.csrfToken(),
+    });
+});
+
+//   render the users page
+app.get("/users", function (request, response) {
+    response.render("signup", { title: "login", csrfToken: request.csrfToken() });
+});
+// render the login page
+app.get("/login", function (request, response) {
+    response.render("login", { title: "Login", csrfToken: request.csrfToken() }); // here the title is located in the login.ejs file
+});
+app.post("/users", async function (request, response) {
+    console.log("First Name", request.body.firstName)
+    try {
+        const user = await User.create({
+            firstName: request.body.firstName,
+            lastName: request.body.lastName,
+            email: request.body.email,
+            password: request.body.password,
+            role: "admin"
+        });
+        response.redirect('/scheduler')
+    } catch (error) {
+        console.log(error)
+    }
+});
+//****************************************************************************************************************************************************
+
 // render / with the index page and sessions together
-app.get('/', async (request, response) => {
+app.get('/scheduler', async (request, response) => {
     // use try catch to catch any errors
 
     const sessions = await Sessions.getEverySessions()
     // console.log(sessions)
 
     if (request.accepts('html')) {
-        response.render('index', {
-            title: 'index',
+        response.render('scheduler', {
+            title: 'scheduler',
             sessions: sessions,
             csrfToken: request.csrfToken()
         })
@@ -172,7 +214,7 @@ app.get('/sports/:sport', async (request, response) => {
 
 // lets render sport.ejs file with csrf token
 app.get('/sports', (request, response) => {
-    response.render('sports', { title: 'sports' , csrfToken: request.csrfToken()})
+    response.render('sports', { title: 'sports', csrfToken: request.csrfToken() })
 })
 
 
