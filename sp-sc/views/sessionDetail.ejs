@@ -30,7 +30,7 @@
         }
       }).catch((err) => console.error(err))
     }
-
+/*
     // update session by its id
     function updateSession(id) {
       fetch(`/updateSession/${id}`, {
@@ -49,6 +49,8 @@
         }
       }).catch((err) => console.error(err))
     }
+    */
+    
     function addPlayer(sessionId, name) {
       const inputId = `player-${sessionId}`;
       const inputValue = document.getElementById(inputId).value;
@@ -56,7 +58,7 @@
       console.log(`The value of input field with id ${inputId} is: ${inputValue}
      and the name is: ${name}`);
       const addedName = inputValue + ', ' + name;
-      fetch(`/session/${sessionId}`, {
+      fetch(`/sessionDetail/${sessionId}`, {
         method: 'put',
         headers: {
           'Content-Type': 'application/json'
@@ -81,7 +83,7 @@
 
       newName = arrayOfPlayers.join(", "); // convert array to string
       console.log("newName: " + newName);
-      fetch(`/session/${sessionId}`, {
+      fetch(`/sessionDetail/${sessionId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -98,6 +100,7 @@
         .catch((err) => console.error(err))
     }
   </script>
+  <title><%= title %></title>
 </head>
 
 <body class="bg-green-100">

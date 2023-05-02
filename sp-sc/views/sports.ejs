@@ -10,7 +10,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <meta name="csrf-token" content="<%= csrfToken %>">
 
-  <title>Sport Scheduler</title>
+  <title><%= title %></title>
   <script>
     var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     // method to delete session by its id by fetching the delete route
