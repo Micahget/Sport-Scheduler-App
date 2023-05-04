@@ -329,7 +329,7 @@ app.post('/newSport', async (request, response) => {
             sport: request.body.sport,
         })
         console.log(sport)
-        return response.redirect('/')
+        return response.redirect('/scheduler')
     }
     catch (error) {
         console.log(error)
@@ -354,7 +354,9 @@ app.get('/sports/:sport',
             })
         } else {
             response.json({
-                sessions: sessions
+                sport: sport,
+                activeSession: activeSession,
+                passedSession: passedSession,
             })
         }
 
