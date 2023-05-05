@@ -15,13 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
     // method to create sessions
-    static addSession({ date, place, playerName, totalPlayers, sport }) {
+    static addSession({ date, place, playerName, totalPlayers, sport, userId }) {
       return this.create({
         date: date,
         place: place,
         playerName: playerName,
         totalPlayers: totalPlayers,
         sport: sport,
+        userId: userId,
       })
     }
 
@@ -112,6 +113,17 @@ module.exports = (sequelize, DataTypes) => {
             [Op.lt]: new Date(), // before today
           },
           sport: sport
+        }
+      })
+    }
+
+    // method to extract the sessions of a user
+    static getSessionsByUserId(userId, sport) {
+      return this.findAll({
+        where: {
+          userId: userId,
+          sport: sport
+
         }
       })
     }

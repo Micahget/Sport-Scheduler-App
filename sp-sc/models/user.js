@@ -17,19 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       })
 
     }
-    // check if the user is admin or not
-    static async checkRole(email) {
-      let role;
-      const adminEmails = ['admin1@example.com', 'admin2@example.com', 'admin3@example.com'];
-      if (adminEmails.includes(email)) { // here include is a method that check if the email is in the list or not
-        role = 'admin';
-      }
-      else {
-        role = 'user';
-      }
-      return role;
-    }
-
   }
   User.init({
     firstName: DataTypes.STRING,

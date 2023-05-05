@@ -19,9 +19,10 @@
             <%- //include ('header.ejs') %>
                 <div class="border rounded-lg p-4 bg-white">
                     <p class="py-2 text-2xl font-bold">Welcome to Sports Scheduler</p>
+                    <% if(user.role === 'admin'){ %>
                     <p class="py-2"><a class="text-green-400" href="/newSport">Add Sport</a></p>
                     <p class="py-2"><a class=" text-green-400" href="/sessionList">View Sessions</a></p>
-
+                    <% } %>
                     <h2 class="text-lg font-medium text-gray-900 mb-2">List of Sports</h2>
                     <div class="flex flex-col gap-2">
                         <% const sports=sessions.map(session=> session.sport);
