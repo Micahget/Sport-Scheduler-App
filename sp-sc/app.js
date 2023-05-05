@@ -152,7 +152,9 @@ app.get("/login", function (request, response) {
 app.post("/users", async function (request, response) {
     // hash the password
     const hashedPad = await bycrypt.hash(request.body.password, saltRounds)
-    const role = await User.checkRole(request.body.email)
+    const adminPassCode = 'admin'
+    const adminPass = request.body.adminPass
+    const role = adminPass === adminPassCode ? 'admin' : 'user'
     console.log("First Name", request.body.firstName)
     try {
         const user = await User.create({
@@ -213,12 +215,14 @@ app.get('/scheduler',
         // use try catch to catch any errors
 
         const sessions = await Sessions.getEverySessions()
+        const user = request.user
         // console.log(sessions)
 
         if (request.accepts('html')) {
             response.render('scheduler', {
                 title: 'scheduler',
                 sessions: sessions,
+                user: user,
                 csrfToken: request.csrfToken()
             })
         } else {
@@ -347,6 +351,7 @@ app.get('/sports/:sport',
         const activeSession = await Sessions.getActiveSessions(sport)
         const passedSession = await Sessions.getPastSessions(sport)
         const user = request.user
+        const userSession = await Sessions.getSessionsByUserId(user.id, sport)
 
         if (request.accepts('html')) {
             response.render('sports', {
@@ -355,6 +360,7 @@ app.get('/sports/:sport',
                 activeSession: activeSession,
                 passedSession: passedSession,
                 User: user,
+                userSession: userSession,
                 csrfToken: request.csrfToken()
             })
         } else {
@@ -362,6 +368,8 @@ app.get('/sports/:sport',
                 sport: sport,
                 activeSession: activeSession,
                 passedSession: passedSession,
+                User: user,
+                userSession: userSession
             })
         }
 

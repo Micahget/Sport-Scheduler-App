@@ -117,6 +117,17 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
 
+    // method to extract the sessions of a user
+    static getSessionsByUserId(userId, sport) {
+      return this.findAll({
+        where: {
+          userId: userId,
+          sport: sport
+
+        }
+      })
+    }
+
 
   }
   session.init({
