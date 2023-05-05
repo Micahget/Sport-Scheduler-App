@@ -15,13 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
     // method to create sessions
-    static addSession({ date, place, playerName, totalPlayers, sport }) {
+    static addSession({ date, place, playerName, totalPlayers, sport, userId }) {
       return this.create({
         date: date,
         place: place,
         playerName: playerName,
         totalPlayers: totalPlayers,
         sport: sport,
+        userId: userId,
       })
     }
 

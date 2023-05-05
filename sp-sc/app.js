@@ -255,6 +255,8 @@ app.post('/newSession', async (request, response) => {
     const sport = request.body.sport
     const playerName = request.body.playerName
     const count = playerName.split(',')
+    // get the user Id of the session creator 
+    const userId = request.user.id
     if (count.length > request.body.totalPlayers) {
         // this console message will be replaced by a flash message
         console.log('you have entered more players than the total players')
@@ -267,6 +269,7 @@ app.post('/newSession', async (request, response) => {
             playerName: playerName,
             totalPlayers: request.body.totalPlayers,
             sport: sport,
+            userId: userId
         })
         // console.log(session)
         // redirect to the sessions page
