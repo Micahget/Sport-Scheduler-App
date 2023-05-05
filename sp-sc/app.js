@@ -346,6 +346,7 @@ app.get('/sports/:sport',
         // get active Sessions of the sport
         const activeSession = await Sessions.getActiveSessions(sport)
         const passedSession = await Sessions.getPastSessions(sport)
+        const user = request.user
 
         if (request.accepts('html')) {
             response.render('sports', {
@@ -353,6 +354,7 @@ app.get('/sports/:sport',
                 sport: sport,
                 activeSession: activeSession,
                 passedSession: passedSession,
+                User: user,
                 csrfToken: request.csrfToken()
             })
         } else {
@@ -446,11 +448,13 @@ app.get('/sessionDetail/:id',
     connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
         const id = request.params.id
         const session = await Sessions.getSessionById(id)
+        const user = request.user
         console.log(id)
         if (request.accepts('html')) {
             response.render('sessionDetail', {
                 title: 'sessionDetail',
                 session: session,
+                User: user,
                 csrfToken: request.csrfToken()
             })
         } else {
