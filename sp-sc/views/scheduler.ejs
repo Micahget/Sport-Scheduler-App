@@ -18,7 +18,8 @@
         <div class="col-start-3 col-span-2">
             <%- //include ('header.ejs') %>
                 <div class="border rounded-lg p-4 bg-white">
-                    <p class="py-2 text-2xl font-bold">Welcome to Sports Scheduler</p>
+                    <p class="py-2 text-2xl font-bold"> Sports Scheduler</p>
+                    <p class="py-2 text-lg font-bold"> Hi, <%= user.firstName %>! Welcome!</p>
                     <% if(user.role === 'admin'){ %>
                     <p class="py-2"><a class="text-green-400" href="/newSport">Add Sport</a></p>
                     <p class="py-2"><a class=" text-green-400" href="/sessionList">View Sessions</a></p>
