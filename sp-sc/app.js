@@ -4,7 +4,7 @@ const app = express()
 // const csrf = require('csurf')
 var csrf = require("tiny-csrf");
 const cookieParser = require('cookie-parser')
-const { Sessions, User } = require('./models')
+const { Sessions, UserAccount } = require('./models')
 const bodyParser = require('body-parser')
 
 // import authentication middlewares
@@ -53,7 +53,7 @@ passport.use('user-local', new LocalStrategy(
         passwordField: "password",
     }, async (email, password, done) => {
         try {
-            const user = await User.findOne({
+            const user = await UserAccount.findOne({
                 where: {
                     email: email,
                 },
@@ -81,7 +81,7 @@ passport.use('admin-local', new LocalStrategy({
     passwordField: 'password'
 }, async (email, password, done) => {
     try {
-        const user = await User.findOne({
+        const user = await UserAccount.findOne({
             where: {
                 email: email,
             },
@@ -111,7 +111,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-    User.findByPk(id)
+    UserAccount.findByPk(id)
     .then((user) => {
       console.log("deserializing user in session ", user.id);
       done(null, user);
@@ -157,7 +157,7 @@ app.post("/users", async function (request, response) {
     const role = adminPass === adminPassCode ? 'admin' : 'user'
     console.log("First Name", request.body.firstName)
     try {
-        const user = await User.create({
+        const user = await UserAccount.create({
             firstName: request.body.firstName,
             lastName: request.body.lastName,
             email: request.body.email,
