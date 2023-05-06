@@ -74,6 +74,27 @@
       })
         .catch((err) => console.error(err))
     }
+    // cancelSession
+    function cancelSession(sessionId) {
+      const reason = document.getElementById(`cancel-reason-${sessionId}`).value;
+      const canceled = true;
+      fetch(`/sessionDetail/${sessionId}`, {
+        method: 'Delete',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          reason: reason,
+          active: canceled,
+          _csrf: token
+        })
+      }).then(res => {
+        if (res.ok) {
+          window.location.reload()
+        }
+      })
+        .catch((err) => console.error(err))
+    }
   </script>
   <title>
     <%= title %>
@@ -84,10 +105,14 @@
   <div class="container mx-auto mt-6 mb-12 p-6 bg-white rounded-lg shadow-lg">
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-bold text-gray-800 mb-6">Session Details</h1>
-      <% if(session.id===User.id || User.role==='admin' ) { %>
+      <% if(session.id===User.id || User.role==='admin') { %>
+
         <div class="flex items-center space-x-2">
+          <% if(session.active) { %>
+
           <a href="/updateSession/<%= session.sport %>/<%= session.id %>"
             class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-gray-800 text-sm">Edit</a>
+          <% } %>
           <a href="#" onclick="deleteSession('<%= session.id %>')"
             class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-white text-sm">Delete</a>
         </div>
@@ -137,9 +162,9 @@
 
               </div>
               <% } %>
-                <% if(session.totalPlayers> arrayOfPlayers.length ) { %>
-            
-            <div class=" bg-gray-200 flex items-center px-3 py-1 rounded-full space-x-2 text-gray-700">
+                <% if(session.totalPlayers> arrayOfPlayers.length && session.active) { %>
+
+                  <div class=" bg-gray-200 flex items-center px-3 py-1 rounded-full space-x-2 text-gray-700">
 
                     <input type="text" placeholder="name" id="player-<%= session.id %>" name="playerName">
                     <button
@@ -151,15 +176,37 @@
                           clip-rule="evenodd" />
                       </svg>
                     </button>
-            </div>
-    <% } else { %>
-      <div class="bg-gray-200 flex items-center px-3 py-1 rounded-full space-x-2 text-gray-700">
-        <p class="text-red-700 font-medium">No Slot</p>
+                  </div>
+                  <% } else { %>
+                    <div class="bg-gray-200 flex items-center px-3 py-1 rounded-full space-x-2 text-gray-700">
+                      <p class="text-red-700 font-medium">No Slot</p>
+                    </div>
+                    <% } %>
+
+
+    </div>
+
+    <!-- <label class="inline-flex items-center">
+      <input type="checkbox" class="form-checkbox text-indigo-600 h-5 w-5" id="cancel-checkbox-<%=// session.id %>"
+        <%= //session.active ? "" : "checked" %> onclick="cancelSession('<%= session.id %>')">
+        <span class="ml-2 text-gray-700">Cancel</span>
+    </label> -->
+    <% if(session.active){ %>
+    <div class="flex items-center space-x-2">
+      <label for="reason" class="block text-sm font-medium text-gray-700">Reason to Cancel:</label>
+      <input type="text" id="cancel-reason-<%= session.id %>" name="reason" id="reason" class="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md">
+      <button type="button" onclick="cancelSession('<%= session.id %>')" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:bg-red-500">Cancel</button>
+    </div>
+    <% }else{ %>
+      <div>
+        <p class="text-red-700 font-medium">This session has been cancelled</p>
+        <p class="text-red-700 font-medium">Reason: <%= session.Reason %></p>
       </div>
       <% } %>
-
-  </div>
-
+    <button
+      class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+      <a href="/scheduler" class="text-gray-700">Go back</a>
+    </button>
   </div>
 </body>
 

@@ -100,7 +100,8 @@ module.exports = (sequelize, DataTypes) => {
           date: {
             [Op.gt]: new Date(), // after today
           },
-          sport: sport
+          sport: sport,
+          active: true
         }
       })
     }
@@ -112,7 +113,8 @@ module.exports = (sequelize, DataTypes) => {
           date: {
             [Op.lt]: new Date(), // before today
           },
-          sport: sport
+          sport: sport,
+          active: true
         }
       })
     }
@@ -122,11 +124,43 @@ module.exports = (sequelize, DataTypes) => {
       return this.findAll({
         where: {
           userId: userId,
-          sport: sport
+          sport: sport,
+          active: true
 
         }
       })
     }
+
+    // setActiveStatus(canceled) {
+    //   if (canceled === true) {
+    //     return this.update({ active: false });
+    //   } else {
+    //     return this.update({ active: true });
+    //   }
+    // }
+
+    // method to cancel a session by giving active value and reason
+    static cancelSessionById(id, Reason) {
+      return this.update({
+        active: false,
+        Reason: Reason
+      }, {
+        where: {
+          id: id
+        }
+      })
+    }
+
+    // display sessions with active status false
+    static getInactiveSessions(sport) {
+      return this.findAll({
+        where: {
+          active: false,
+          sport: sport
+        }
+      })
+    }
+
 
 
   }
@@ -135,7 +169,11 @@ module.exports = (sequelize, DataTypes) => {
     place: DataTypes.STRING,
     playerName: DataTypes.STRING,
     totalPlayers: DataTypes.INTEGER,
-    sport: DataTypes.STRING
+    sport: DataTypes.STRING,
+    userId: DataTypes.INTEGER,
+    active: DataTypes.BOOLEAN,
+    Reason: DataTypes.STRING
+
   }, {
     sequelize,
     modelName: 'Sessions',

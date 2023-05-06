@@ -268,7 +268,7 @@ app.post('/newSession', async (request, response) => {
     }
     try {
         await Sessions.addSession({
-            date: request.body.date,
+            date: request.body.date.split('T')[0],
             place: request.body.place,
             playerName: playerName,
             totalPlayers: request.body.totalPlayers,
@@ -352,6 +352,7 @@ app.get('/sports/:sport',
         const passedSession = await Sessions.getPastSessions(sport)
         const user = request.user
         const userSession = await Sessions.getSessionsByUserId(user.id, sport)
+        const inactiveSession = await Sessions.getInactiveSessions(sport)
 
         if (request.accepts('html')) {
             response.render('sports', {
@@ -361,6 +362,7 @@ app.get('/sports/:sport',
                 passedSession: passedSession,
                 User: user,
                 userSession: userSession,
+                inactiveSession: inactiveSession,
                 csrfToken: request.csrfToken()
             })
         } else {
@@ -481,6 +483,22 @@ app.put('/sessionDetail/:id/', async (request, response) => {
     try {
         const updated = await Sessions.updatePlayerNameById(id, name)
         return response.json({ success: true });
+    }
+    catch (error) {
+        console.log(error);
+        return response.status(422).json(error);
+    }
+})
+
+// update session by id
+app.delete('/sessionDetail/:id', async (request, response) => {
+    const id = request.params.id
+    const reason = request.body.reason
+    // const active = request.body.active
+    console.log("reason: ", reason)
+    try{
+        const updated = await Sessions.cancelSessionById(id, reason)
+        return response.json(updated);
     }
     catch (error) {
         console.log(error);
