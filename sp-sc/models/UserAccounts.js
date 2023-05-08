@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
       })
 
     }
+    // method to fetch all the users 
+    static getAllUsers() { // this will return 
+      return this.findAll();
+    }
+    
   }
   UserAccount.init({
     firstName: DataTypes.STRING,

@@ -16,7 +16,7 @@
     <div class="grid grid-cols-6">
         <div class="col-start-2 col-span-4">
           <div class="border rounded-lg p-4 bg-white">
-            <h1 class="text-2xl font-medium text-gray-900 mb-4">Add New Sport</h1>
+            <a href="/scheduler"><h1 class="text-2xl font-medium text-gray-900 mb-4">Add New Sport</h1></a>
             <form method="post" action="/newSport" class="flex flex-col gap-4">
               <!--add csrf token field-->
               <input type="hidden" name="_csrf" value="<%= csrfToken %>">

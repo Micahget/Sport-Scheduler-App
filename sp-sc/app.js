@@ -459,12 +459,14 @@ app.get('/sessionDetail/:id',
         const id = request.params.id
         const session = await Sessions.getSessionById(id)
         const user = request.user
+        const dbUser = await UserAccount.getAllUsers()
         console.log(id)
         if (request.accepts('html')) {
             response.render('sessionDetail', {
                 title: 'sessionDetail',
                 session: session,
                 User: user,
+                dbUser: dbUser,
                 csrfToken: request.csrfToken()
             })
         } else {
