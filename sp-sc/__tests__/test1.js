@@ -1,9 +1,25 @@
 /* eslint-disable */
-// now I am going to write a test to check if the new sessions are added to the database successfully
-// before that I need to import important stuffes
 const request = require('supertest')
 const app = require('../app')
+const cheerio = require("cheerio");
 const db = require("../models/index");
+
+let server, agent;
+function extractCsrfToken(res) {
+  var $ = cheerio.load(res.text);
+  return $('[name="_csrf"]').val();
+}
+
+// helper function for login
+const login = async (agent, username, password) => {
+  let res = await agent.get("/login");
+  let csrfToken = extractCsrfToken(res);
+  res = await agent.post("/session").send({
+    email: username,
+    password: password,
+    _csrf: csrfToken,
+  });
+};
 
 
 describe("Sport Scheduler", function () {
@@ -23,27 +39,52 @@ describe("Sport Scheduler", function () {
     }
   });
 
-  // test to create a new session
-    test("Creates a new session and responds with json at /sessions POST endpoint", async () => {
-        const response = await agent.post("/newSession").send({
-            
-            date: new Date().toISOString(),
-            playerName: "John, Smith, Mike",
-            place: "Gym",
-            totalPlayers: 5
-        });
-        console.log("the details of the new session are: ", response.body);
-
-        expect(response.statusCode).toBe(302); // here I am getting error 404 not found. lets fix it. I think the problem is with the route. lets fix it. To 
+  // test to sign up an admin user
+  test("Signs up an admin ", async () => {
+    let res = await agent.get("/signup");
+    const csrfToken = extractCsrfToken(res);
+    res = await agent.post("/users").send({
+      firstName: "John",
+      lastName: "Smith",
+      email: "John@gmail.com",
+      password: "123456",
+      role: "admin",
+      _csrf: csrfToken,
     });
+    console.log("the details of the new user are: ", res.body);
+    expect(res.statusCode).toBe(302);
+  });
 
-// test to get all sessions
-test("Gets all sessions and responds with json at /sessions GET endpoint", async () => {
-    const response = await agent.get("/newSession");
+
+  // // sign out test
+  test("sign out", async () => {
+    let res = await agent.get("/scheduler");
+    expect(res.statusCode).toBe(200);
+
+    res = await agent.get("/signout");
+    expect(res.statusCode).toBe(302);
+    res = await agent.get("/scheduler");
+    expect(res.statusCode).toBe(302);
+  });
+
+  // test to add a new session
+  test("add a new session", async () => {
+    const agent = request.agent(server);
+    await login(agent, "John@gmail.com", "123456");
+
+    let res = await agent.get("/newSession/Football");
+    const csrfToken = extractCsrfToken(res);
+    const response = await agent.post("/newSession").send({
+      date: new Date().toISOString(),
+      place: "Cairo",
+      playerName: "John, Smith, Mark",
+      totalPlayers: 10,
+      sport: "Football",  
+      _csrf: csrfToken,
+    });
     console.log("the details of the new session are: ", response.body);
+    expect(response.statusCode).toBe(302);
+  }); 
 
-    expect(response.statusCode).toBe(200);
-    });
 
-  
 });

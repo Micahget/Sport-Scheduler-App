@@ -177,11 +177,6 @@
                       <button
                         onclick="addPlayer('<%= session.id %>', ' <%= session.playerName %>', '<%= User.firstName %>')"
                         class="hover:text-red-600 outline-none focus:outline-none"><span>Join</span>
-                        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                        <path fill-rule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z"
-                          clip-rule="evenodd" />
-                      </svg> -->
                       </button>
 
                       <% } else{ %>
@@ -199,12 +194,6 @@
 
 
     </div>
-
-    <!-- <label class="inline-flex items-center">
-      <input type="checkbox" class="form-checkbox text-indigo-600 h-5 w-5" id="cancel-checkbox-<%=// session.id %>"
-        <%= //session.active ? "" : "checked" %> onclick="cancelSession('<%= session.id %>')">
-        <span class="ml-2 text-gray-700">Cancel</span>
-    </label> -->
     <% if(session.active && session.userId===User.id){ %>
       <div class="flex items-center space-x-2 p-4">
         <label for="reason" class="block text-sm font-medium text-gray-700">Reason to Cancel:</label>

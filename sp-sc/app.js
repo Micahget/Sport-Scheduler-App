@@ -22,7 +22,6 @@ const saltRounds = 10
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('shh! this is a secret'))
-// app.use(csrf({ cookie: true })) // I do not need this because I am using cookie parser and I am passing the secret key to it
 app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
 
 
@@ -307,9 +306,7 @@ app.get('/sessionList',
             })
         }
 
-    })// sessions.ejs is getting rended but not getting the data from the database. lets fix it.  
-
-
+    })
 
 
 // lets render sport.ejs file
