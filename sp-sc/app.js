@@ -32,6 +32,7 @@ app.use(flash())
 
 
 const path = require("path");
+const db = require('./models');
 app.use(express.static(path.join(__dirname, "public")));
 
 app.set("views", path.join(__dirname, "views")); // this is the path to the views folder.
@@ -289,7 +290,7 @@ app.post('/newSession', async (request, response) => {
     const count = playerName.split(',') 
     // get the user Id of the session creator 
     const userId = request.user.id
-    if (count.length > request.body.totalPlayers) {
+    if (count.length > totalPlayers) {
         // this console message will be replaced by a flash message
         request.flash('error', 'you have entered more players than the total players')
         return response.redirect('/newSession/'+ sport)
@@ -299,7 +300,7 @@ app.post('/newSession', async (request, response) => {
             date: date,
             place: place,
             playerName: playerName,
-            totalPlayers: totalPlayer,
+            totalPlayers: totalPlayers,
             sport: sport,
             userId: userId
         })
