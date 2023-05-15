@@ -24,6 +24,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('shh! this is a secret'))
 app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
 
+// import flash message 
+const flash = require("connect-flash");
+app.use(flash())
+
+
 
 
 const path = require("path");
@@ -45,6 +50,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(function (request, response, next) {
+    response.locals.messages = request.flash();
+    next();
+});
+
 // here we are setting up passport local strategy for the user
 passport.use('user-local', new LocalStrategy(
     {
@@ -52,27 +62,23 @@ passport.use('user-local', new LocalStrategy(
         passwordField: "password",
     }, async (email, password, done) => {
         try {
-            const user = await UserAccount.findOne({
-                where: {
-                    email: email,
-                },
-            });
+            const user = await UserAccount.findOne({ where: { email: email } });
             if (!user) {
                 return done(null, false, { message: "Incorrect email." });
             }
-            if (user.role !== "user") {
-                return done(null, false, { message: "Incorrect email." });
-            }
             // compare the the password with the hashed password
-        const match = await bycrypt.compare(password, user.password)
-        if (!match) {
-            return done(null, false, { message: 'Incorrect password.' });
-        }
-        return done(null, user);
+            const result = await bycrypt.compare(password, user.password);
+            if (result) {
+                return done(null, user);
+            } else {
+                return done(null, false, { message: "Invalid password" });
+            }
         } catch (error) {
             return done(error);
         }
-    }));
+    }
+)
+);
 
 // here we are setting up passport local strategy for the admin
 passport.use('admin-local', new LocalStrategy({
@@ -97,7 +103,7 @@ passport.use('admin-local', new LocalStrategy({
         if (!match) {
             return done(null, false, { message: 'Incorrect password.' });
         }
-        return done(null, user);
+        return done(null, admin); // here in the done function we are passing the user object wich is the admin user
     } catch (err) {
         return done(err);
     }
@@ -111,13 +117,13 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(function (id, done) {
     UserAccount.findByPk(id)
-    .then((user) => {
-      console.log("deserializing user in session ", user.id);
-      done(null, user);
-    })
-    .catch((error) => {
-      done(error, null);
-    });
+        .then((user) => {
+            console.log("deserializing user in session ", user.id);
+            done(null, user);
+        })
+        .catch((error) => {
+            done(error, null);
+        });
 });
 
 
@@ -151,6 +157,18 @@ app.get("/login", function (request, response) {
 app.post("/users", async function (request, response) {
     // hash the password
     const hashedPad = await bycrypt.hash(request.body.password, saltRounds)
+    // flash message
+    const { firstName, email, password } = request.body;
+    if (!firstName || !email || !password) {
+        request.flash("error", "Please fill all the fields");
+        return response.redirect("/users");
+    }
+    // check the database if the user already exists
+    const user = await UserAccount.findOne({ where: { email } });
+    if (user) {
+        request.flash("error", "User already exists");
+        return response.redirect("/users");
+    }
     const adminPassCode = 'admin'
     const adminPass = request.body.adminPass
     const role = adminPass === adminPassCode ? 'admin' : 'user'
@@ -176,36 +194,43 @@ app.post("/users", async function (request, response) {
 });
 
 //this one is when the user want to login
-app.post("/session", (request, response, next) => {
-    passport.authenticate("user-local", (err, user, info) => {
+app.post('/session', (req, res, next) => {
+    passport.authenticate('user-local', { failureFlash: true }, (err, user, info) => {
       if (err) return next(err);
-      if (user) return request.logIn(user, (err) => {
-        if (err) return next(err);
-        return response.redirect("/scheduler");
-      });
-      passport.authenticate("admin-local", (err, admin, info) => {
-        if (err) return next(err);
-        if (admin) return request.logIn(admin, (err) => {
+      if (user) { 
+        req.logIn(user, (err) => {
           if (err) return next(err);
-          return response.redirect("/scheduler");
+          return res.redirect('/scheduler');
         });
-        // redirecting the user to the login page if the user is not found
-        return response.redirect("/login");
-      })(request, response, next);
-    })(request, response, next);
-  });
-
-  // creating logout route to render the login.ejs file
-app.get("/signout", (request, response, next) => {
-    request.logout((error) => {
-      //logout is a method provided by passport
-      if (error) {
-        return next(error);
+      } else {
+        passport.authenticate('admin-local', { failureFlash: true }, (err, admin, info) => {
+          if (err) return next(err);
+          if (admin) {
+            req.logIn(admin, (err) => {
+              if (err) return next(err); 
+              return res.redirect('/scheduler');
+            });
+          } else {
+            req.flash('error', 'Invalid email or password');
+            return res.redirect('/login');
+          }
+        })(req, res, next);
       }
-      return response.redirect("/"); // redirect to the landing page
-    });
+    })(req, res, next);
   });
   
+
+// creating logout route to render the login.ejs file
+app.get("/signout", (request, response, next) => {
+    request.logout((error) => {
+        //logout is a method provided by passport
+        if (error) {
+            return next(error);
+        }
+        return response.redirect("/"); // redirect to the landing page
+    });
+});
+
 //**********************************************End of signup/ login*****************************************************
 
 // render / with the index page and sessions together
@@ -255,22 +280,26 @@ app.get('/newSession/:sport',
 
 // now when the user clicks on the submit button, we want to add the session to the database
 app.post('/newSession', async (request, response) => {
-    const sport = request.body.sport
-    const playerName = request.body.playerName
-    const count = playerName.split(',')
+    const { date, place, playerName, totalPlayers, sport } = request.body
+    console.log('thisssssssssssssssss',date, place, playerName, totalPlayers, sport)
+    if(!date || !place || !playerName || !totalPlayers){
+        request.flash('error', 'Please fill all the fields')
+        return response.redirect('/newSession/'+ sport)
+    } // here I am getting error even i fill all the forms its showing the error message. To fix this error I have to add the csrfToken in the newSession.ejs file
+    const count = playerName.split(',') 
     // get the user Id of the session creator 
     const userId = request.user.id
     if (count.length > request.body.totalPlayers) {
         // this console message will be replaced by a flash message
-        console.log('you have entered more players than the total players')
-        return response.redirect('/newSession/' + sport)
+        request.flash('error', 'you have entered more players than the total players')
+        return response.redirect('/newSession/'+ sport)
     }
     try {
         await Sessions.addSession({
-            date: request.body.date.split('T')[0],
-            place: request.body.place,
+            date: date,
+            place: place,
             playerName: playerName,
-            totalPlayers: request.body.totalPlayers,
+            totalPlayers: totalPlayer,
             sport: sport,
             userId: userId
         })
@@ -495,7 +524,7 @@ app.delete('/sessionDetail/:id', async (request, response) => {
     const reason = request.body.reason
     // const active = request.body.active
     console.log("reason: ", reason)
-    try{
+    try {
         const updated = await Sessions.cancelSessionById(id, reason)
         return response.json(updated);
     }
