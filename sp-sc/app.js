@@ -197,29 +197,29 @@ app.post("/users", async function (request, response) {
 //this one is when the user want to login
 app.post('/session', (req, res, next) => {
     passport.authenticate('user-local', { failureFlash: true }, (err, user, info) => {
-      if (err) return next(err);
-      if (user) { 
-        req.logIn(user, (err) => {
-          if (err) return next(err);
-          return res.redirect('/scheduler');
-        });
-      } else {
-        passport.authenticate('admin-local', { failureFlash: true }, (err, admin, info) => {
-          if (err) return next(err);
-          if (admin) {
-            req.logIn(admin, (err) => {
-              if (err) return next(err); 
-              return res.redirect('/scheduler');
+        if (err) return next(err);
+        if (user) {
+            req.logIn(user, (err) => {
+                if (err) return next(err);
+                return res.redirect('/scheduler');
             });
-          } else {
-            req.flash('error', 'Invalid email or password');
-            return res.redirect('/login');
-          }
-        })(req, res, next);
-      }
+        } else {
+            passport.authenticate('admin-local', { failureFlash: true }, (err, admin, info) => {
+                if (err) return next(err);
+                if (admin) {
+                    req.logIn(admin, (err) => {
+                        if (err) return next(err);
+                        return res.redirect('/scheduler');
+                    });
+                } else {
+                    req.flash('error', 'Invalid email or password');
+                    return res.redirect('/login');
+                }
+            })(req, res, next);
+        }
     })(req, res, next);
-  });
-  
+});
+
 
 // creating logout route to render the login.ejs file
 app.get("/signout", (request, response, next) => {
@@ -282,18 +282,18 @@ app.get('/newSession/:sport',
 // now when the user clicks on the submit button, we want to add the session to the database
 app.post('/newSession', async (request, response) => {
     const { date, place, playerName, totalPlayers, sport } = request.body
-    console.log('thisssssssssssssssss',date, place, playerName, totalPlayers, sport)
-    if(!date || !place || !playerName || !totalPlayers){
+    console.log('thisssssssssssssssss', date, place, playerName, totalPlayers, sport)
+    if (!date || !place || !playerName || !totalPlayers) {
         request.flash('error', 'Please fill all the fields')
-        return response.redirect('/newSession/'+ sport)
+        return response.redirect('/newSession/' + sport)
     } // here I am getting error even i fill all the forms its showing the error message. To fix this error I have to add the csrfToken in the newSession.ejs file
-    const count = playerName.split(',') 
+    const count = playerName.split(',')
     // get the user Id of the session creator 
     const userId = request.user.id
     if (count.length > totalPlayers) {
         // this console message will be replaced by a flash message
         request.flash('error', 'you have entered more players than the total players')
-        return response.redirect('/newSession/'+ sport)
+        return response.redirect('/newSession/' + sport)
     }
     try {
         await Sessions.addSession({
@@ -318,15 +318,28 @@ app.post('/newSession', async (request, response) => {
 
 
 // taking the above code as a referece give me a get method to get all the sessions and render them in the sessions page
-app.get('/sessionList',
+app.get('/sessionReport',
     connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
         const sessions = await Sessions.getEverySessions()
-        // console.log(sessions)
+        const activeSession = await Sessions.getNumberOfActiveSessions()
+        const inactveSession = await Sessions.getNumberOfInactiveSessions()
+        const totalUser = await UserAccount.getAllUsers()
+        // const famousSport = await Sessions.getFamousSport()
+        const futureSessions = await Sessions.getFutureSessions()
+        const pastSessions = await Sessions.getPassedSessions()
+        const todaySessions = await Sessions.getTodaySessions()
 
         if (request.accepts('html')) {
-            response.render('sessionList', {
-                title: 'Sessions List',
+            response.render('sessionReport', {
+                title: 'Sessions Report',
                 sessions: sessions,
+                activeSession: activeSession,
+                inactveSession: inactveSession,
+                user: totalUser,
+                // famousSport: famousSport,
+                futureSessions: futureSessions,
+                pastSessions: pastSessions,
+                todaySessions: todaySessions,
                 csrfToken: request.csrfToken()
 
             })
