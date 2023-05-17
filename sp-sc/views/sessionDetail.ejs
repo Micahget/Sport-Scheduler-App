@@ -149,8 +149,8 @@
                   <span class="bg-green-100 text-gray-400 text-xs px-1 rounded-full">Organizer</span>
                   <% } %>
                     <% console.log("player: " + arrayOfPlayers[i]) %>
-            <!--the button is to delete the player from the session-->
-           <% if(session.userId === User.id || User.role === 'admin' ) { %>
+                  <!--the button is to delete the player from the session-->
+                 <% if(session.userId === User.id || User.role === 'admin' ) { %>
                   <button class=" hover:text-red-600 outline-none focus:outline-none"
                       onclick=" deletePlayer('<%=session.id %>', '<%= arrayOfPlayers[i] %>', '<%= session.playerName %>')">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -161,15 +161,12 @@
 
                       </button>
                       <% } %>
-
-
-              </div>
+                </div>
               <% } %>
                 <% if(session.totalPlayers> arrayOfPlayers.length && session.active) { %>
 
                   <div class=" bg-gray-200 flex items-center px-3 py-1 rounded-full space-x-2 text-gray-700">
 
-                    <!-- <input type="text" placeholder="name" id="player-<%=// session.id %>" name="playerName"> -->
                     <% if( !arrayOfPlayers.includes(User.firstName)) { %>
                       <button
                         onclick="addPlayer('<%= session.id %>', ' <%= session.playerName %>', '<%= User.firstName %>')"
@@ -184,8 +181,7 @@
                     <% } %>
                       <%if(arrayOfPlayers.includes(User.firstName)){ %>
                         <div class="bg-gray-200 flex items-center px-3 py-1 rounded-full space-x-2 text-gray-700">
-                          <button
-                            onclick=" deletePlayer('<%=session.id %>', '<%= User.firstName %>', '<%= session.playerName %>')"
+                          <button onclick=" deletePlayer('<%=session.id %>', '<%= User.firstName %>', '<%= session.playerName %>')"
                             class="text-red-700 font-medium outline-none focus:outline-none"><span>Leave</span>
                           </button>
                         </div>
