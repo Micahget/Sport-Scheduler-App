@@ -175,19 +175,21 @@
                         onclick="addPlayer('<%= session.id %>', ' <%= session.playerName %>', '<%= User.firstName %>')"
                         class="hover:text-red-600 outline-none focus:outline-none"><span>Join</span>
                       </button>
-
-                      <% } else{ %>
-                        <button
-                          onclick=" deletePlayer('<%=session.id %>', '<%= User.firstName %>', '<%= session.playerName %>')"
-                          class="text-red-700 font-medium outline-none focus:outline-none"><span>Leave</span>
-                        </button>
-                        <% } %>
+                      <% } %>
                   </div>
                   <% } else { %>
                     <div class="bg-gray-200 flex items-center px-3 py-1 rounded-full space-x-2 text-gray-700">
                       <p class="text-red-700 font-medium">No Slot</p>
                     </div>
                     <% } %>
+                      <%if(arrayOfPlayers.includes(User.firstName)){ %>
+                        <div class="bg-gray-200 flex items-center px-3 py-1 rounded-full space-x-2 text-gray-700">
+                          <button
+                            onclick=" deletePlayer('<%=session.id %>', '<%= User.firstName %>', '<%= session.playerName %>')"
+                            class="text-red-700 font-medium outline-none focus:outline-none"><span>Leave</span>
+                          </button>
+                        </div>
+                        <% } %>
 
 
     </div>
