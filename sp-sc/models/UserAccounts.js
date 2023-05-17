@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
 
     }
     // method to fetch all the users 
-    static getAllUsers() { // this will return 
+    static getAllUsers() {  
       return this.findAll();
     }
     

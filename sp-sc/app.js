@@ -1,7 +1,6 @@
 /* eslint-disable  */
 const express = require('express')
 const app = express()
-// const csrf = require('csurf')
 var csrf = require("tiny-csrf");
 const cookieParser = require('cookie-parser')
 const { Sessions, UserAccount } = require('./models')
@@ -234,7 +233,6 @@ app.get("/signout", (request, response, next) => {
 
 //**********************************************End of signup/ login*****************************************************
 
-// render / with the index page and sessions together
 app.get('/scheduler',
     connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
         // use try catch to catch any errors
@@ -279,14 +277,13 @@ app.get('/newSession/:sport',
     })
 
 
-// now when the user clicks on the submit button, we want to add the session to the database
 app.post('/newSession', async (request, response) => {
     const { date, place, playerName, totalPlayers, sport } = request.body
     console.log('thisssssssssssssssss', date, place, playerName, totalPlayers, sport)
     if (!date || !place || !playerName || !totalPlayers) {
         request.flash('error', 'Please fill all the fields')
         return response.redirect('/newSession/' + sport)
-    } // here I am getting error even i fill all the forms its showing the error message. To fix this error I have to add the csrfToken in the newSession.ejs file
+    } 
     const count = playerName.split(',')
     // get the user Id of the session creator 
     const userId = request.user.id
@@ -304,20 +301,16 @@ app.post('/newSession', async (request, response) => {
             sport: sport,
             userId: userId
         })
-        // console.log(session)
-        // redirect to the sessions page
         return response.redirect('/sports/' + sport)
     } catch (error) {
 
         console.log(error)
     }
 
-    // fivve india names: raj kumar, rahul, ravi, ramesh, rakesh
 })
 
 
 
-// taking the above code as a referece give me a get method to get all the sessions and render them in the sessions page
 app.get('/sessionReport',
     connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
         const sessions = await Sessions.getAvailableSessions()
@@ -368,7 +361,6 @@ app.get('/displayUsers',async (request, response) => {
 
     })
 
-// lets render sport.ejs file
 app.get('/newSport',
     connectEnsureLogin.ensureLoggedIn(), (request, response) => {
         if (request.accepts('html')) {
@@ -563,8 +555,6 @@ app.delete('/sessionDetail/:id', async (request, response) => {
         return response.status(422).json(error);
     }
 })
-
-
 
 
 module.exports = app

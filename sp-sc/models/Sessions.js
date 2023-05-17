@@ -131,14 +131,6 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
 
-    // setActiveStatus(canceled) {
-    //   if (canceled === true) {
-    //     return this.update({ active: false });
-    //   } else {
-    //     return this.update({ active: true });
-    //   }
-    // }
-
     // method to cancel a session by giving active value and reason
     static cancelSessionById(id, Reason) {
       return this.update({

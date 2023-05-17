@@ -86,5 +86,4 @@ describe("Sport Scheduler", function () {
     expect(response.statusCode).toBe(302);
   }); 
 
-
 });

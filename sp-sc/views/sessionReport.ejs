@@ -13,51 +13,10 @@
     <%= title %>
   </title>
 </head>
-<script>
-  // here I want to get the dates and pass it and then fetch the data from the database and display it
-  // var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-  // function viewSession() {
-  //   var fromDate = document.getElementById("fromDate").value;
-  //   var toDate = document.getElementById("toDate").value;
-  //   console.log(fromDate);
-  //   console.log(toDate);
-  //   fetch('/sessionReport', {
-  //     method: 'put',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       fromDate: fromDate,
-  //       toDate: toDate,
-  //       _csrf: token
-
-  //     })
-  //   }).then(function (response) {
-  //     if (response.ok) {
-  //       window.location.reload()
-  //     }
-  //   }).catch(function (err) {
-  //     return console.error(err);
-  //   });
-  // }
-</script>
-
 <body>
   <div class="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
     <div class="bg-white p-6 shadow-lg rounded-lg w-96">
       <h1 class="text-gray-600 text-2xl font-bold mb-4">Session Report</h1>
-
-      <!-- <div class="flex justify-between items-center mb-4">
-        <span class="text-gray-600">Sessions between:</span>
-        <input type="date" name="fromDate" id="fromDate" class="text-gray-900"> &nbsp;
-        <span class="text-gray-600"> and </span>&nbsp;
-        <input type="date" name="toDate" id="toDate" class="text-gray-900">
-        <button id="" onclick=" viewSession()"
-          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-4">
-          View
-        </button> -->
-      <!-- </div> -->
       <% var sportCount={}; // Loop through the sessions and count each sport 
       sessions.forEach(session=> {
         const { sport } = session;
@@ -67,8 +26,7 @@
         sportCount[sport] = 1;
         }
         });
-
-        // Find the sport with the highest count
+        // Finding the sport with the highest count
         let mostFamousSport;
         let maxCount = 0;
 
