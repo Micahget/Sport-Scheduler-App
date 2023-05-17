@@ -3,6 +3,10 @@ sp-sc - Sport Scheduler
 
 ## Title : Sport Scheduler
 
+## Website Link: https://sportscheduler.onrender.com/
+
+## Video Link: 
+
 ## Description :
 
 This project is a web application that allows users to create and manage their own sports leagues. Users can create leagues, add teams, and schedule games. The application will automatically generate a schedule for the league based on the number of teams and the number of games to be played. The application will also allow users to view the schedule and standings for the league.
