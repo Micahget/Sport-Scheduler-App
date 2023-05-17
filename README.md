@@ -38,8 +38,14 @@ This project is a web application that allows users to create and manage their o
 * Dashboard Page
 ![image](https://github.com/Micahget/Project_Screenshots/blob/main/dashboard%20for%20the%20admin.png)
 
+* Sessions Page
+![image](https://github.com/Micahget/Project_Screenshots/blob/main/sessions%20page.png)
+
 * Session Details Page
 ![image](https://github.com/Micahget/Project_Screenshots/blob/main/Session%20Details%20page.png)
 
-* Sessions Page
-![image](https://github.com/Micahget/Project_Screenshots/blob/main/sessions%20page.png)
+* Report Page
+![image](https://github.com/Micahget/Project_Screenshots/blob/main/user%20list.png)
+
+* Users List page
+![image](https://github.com/Micahget/Project_Screenshots/blob/main/user%20list.png)
