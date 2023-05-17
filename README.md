@@ -5,7 +5,9 @@ sp-sc - Sport Scheduler
 
 ## Website Link: https://sportscheduler.onrender.com/
 
-## Video Link: 
+## Video Link: https://www.loom.com/share/7b95e1c093a04b4ab17b64d9f97bd9a3
+
+* part 2 of the Video: https://www.loom.com/share/d4883a19bef046e481e472f478357b87
 
 ## Description :
 
