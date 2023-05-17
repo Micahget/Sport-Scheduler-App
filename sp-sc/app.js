@@ -351,6 +351,22 @@ app.get('/sessionReport',
 
     })
 
+    // render the displalyUsers.ejs file
+app.get('/displayUsers',async (request, response) => {
+        const users = await UserAccount.getAllUsers()
+        if (request.accepts('html')) {
+            response.render('displayUsers', {
+                title: 'Users',
+                users: users,
+                csrfToken: request.csrfToken()
+            })
+        } else {
+            response.json({
+                users: users
+            })
+        }
+
+    })
 
 // lets render sport.ejs file
 app.get('/newSport',
@@ -547,6 +563,8 @@ app.delete('/sessionDetail/:id', async (request, response) => {
         return response.status(422).json(error);
     }
 })
+
+
 
 
 module.exports = app
