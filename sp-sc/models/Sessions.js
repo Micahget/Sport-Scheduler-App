@@ -28,13 +28,7 @@ module.exports = (sequelize, DataTypes) => {
 
     // method to get all sessions with date not null
     static getEverySessions() {
-      return this.findAll({
-        where: {
-          date: {
-            [Op.not]: null
-          }
-        }
-      })
+      return this.findAll()
     }
     // method to get as session by its sport name
     static getSessionsBySport(sport) {
@@ -199,7 +193,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     // get future sessions
-    static getFutureSessions() { 
+    static getFutureSessions() {
       return this.findAll({
         where: {
           date: {
@@ -209,16 +203,29 @@ module.exports = (sequelize, DataTypes) => {
         }
       })
     }
-// fetch today's sessions
-static getTodaySessions() {
-  return this.findAll({ where: {
-        date: {[Op.eq]: new Date(),},
-        active: true
+    // fetch today's sessions
+    static getTodaySessions() {
+      return this.findAll({
+        where: {
+          date: { [Op.eq]: new Date(), },
+          active: true
+        }
       }
+      )
     }
-  )
 
-  }
+    // get available sessions
+    static getAvailableSessions() {
+      return this.findAll({
+        where: {
+          date: {
+            // not null 
+            [Op.ne]: null
+          }
+        }
+      })
+
+    }
   }
   session.init({
     date: DataTypes.DATEONLY,

@@ -320,7 +320,7 @@ app.post('/newSession', async (request, response) => {
 // taking the above code as a referece give me a get method to get all the sessions and render them in the sessions page
 app.get('/sessionReport',
     connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
-        const sessions = await Sessions.getEverySessions()
+        const sessions = await Sessions.getAvailableSessions()
         const activeSession = await Sessions.getNumberOfActiveSessions()
         const inactveSession = await Sessions.getNumberOfInactiveSessions()
         const totalUser = await UserAccount.getAllUsers()
