@@ -19,12 +19,10 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          // csrf csrfToken
           _csrf: token,
 
         })
       }).then((result) => {
-        //redirect the page to updateSession
         if (result.ok) {
           window.location.href = '/sports/<%= session.sport %>'
         }
@@ -144,8 +142,7 @@
                 <span>
                   <%= arrayOfPlayers[i] %>
                 </span>
-                <% if ( dbUser.some(db=> db.firstName === arrayOfPlayers[i]) && dbUser.some(db => db.id ===
-                  session.userId)){
+                <% if ( dbUser.some(db=> db.firstName === arrayOfPlayers[i]) && session.userId === User.id){
                   // this method means if the user from the array matches with the firstName in user db and the if that
                   //user is the one who created the session it will displa organazer. I am really surprised by my self
                   //that I get this Idea%>
