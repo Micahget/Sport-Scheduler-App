@@ -556,5 +556,10 @@ app.delete('/sessionDetail/:id', async (request, response) => {
     }
 })
 
+// add about page
+app.get('/about', (request, response) => {
+    response.render('about', { title: 'about' })
+})
+
 
 module.exports = app

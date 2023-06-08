@@ -12,22 +12,25 @@
 </head>
 
 <body>
-  <div class="grid grid-cols-1 md:grid-cols-6">
+  <div class="grid grid-cols-1 md:grid-cols-6 p-8">
     <div class="md:col-start-3 md:col-span-2">
         <div class="border rounded-lg p-4 bg-white">
-          <a href="/scheduler">
-            <p class="py-2 text-2xl font-bold">Sports Scheduler</p>
+          <a class="justify-center" href="/scheduler">
+            <p class="py-2 text-3xl font-bold text-center">Sports Scheduler</p>
           </a>
           <p class="py-2 text-lg font-bold">Hi, <%= user.firstName %>! Welcome.</p>
           <% if(user.role === 'admin'){ %>
           <p class="py-2">
-            <a class="text-green-400" href="/newSport">Add Sport</a>
+            <a class="text-green-400 font-bold" href="/newSport">Add Sport</a>
           </p>
           <p class="py-2">
-            <a class="text-green-400" href="/sessionReport">View Report</a>
+            <a class="text-green-400 font-bold" href="/sessionReport">View Report</a>
           </p>
           <% } %>
-          <h2 class="text-lg font-medium text-gray-900 mb-2">List of Sports</h2>
+          <p class="py-2">
+            <a class="text-green-400 font-bold" href="/about">About</a>
+          </p>
+          <h2 class="text-lg font-medium text-gray-900 mb-2 font-medium">List of Sports</h2>
           <div class="flex flex-col gap-2">
             <% const sports=sessions.map(session=> session.sport);
               const uniqueSports = [...new Set(sports.filter(Boolean))];
@@ -55,6 +58,23 @@
         </div>
     </div>
   </div>
+  <footer class="bg-gray-200 py-4 mt-auto">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap items-center justify-between">
+        <div class="text-gray-600">
+          <span class="text-sm">&copy; 2023 Your Website Name. All rights reserved.</span>
+        </div>
+        <div class="text-gray-600">
+          <a href="/scheduler" class="mr-4 hover:text-gray-800">Terms of Use</a>
+          <a href="/scheduler" class="mr-4 hover:text-gray-800">Privacy Policy</a>
+        </div>
+        <div class="text-gray-600">
+          Developed by <span class="font-bold">Mikiyas Getachew</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
 </body>
 
 </html>
