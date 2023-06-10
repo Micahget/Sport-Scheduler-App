@@ -127,6 +127,17 @@ passport.deserializeUser(function (id, done) {
 });
 
 
+
+const adminAccessControl = async (request, response, next) => {
+    const user = await UserAccount.findOne({ where: { email: request.user.email } })
+    console.log("this is the user", user, "this is the user role", user.role)
+    if (user.role === 'admin') {
+        return next()
+    }
+    response.redirect('/login')
+
+};
+
 // render the landing page
 app.get("/", async (request, response) => {
     response.render("index", {
@@ -317,8 +328,7 @@ app.post('/newSession', async (request, response) => {
 
 
 
-app.get('/sessionReport',
-    connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
+app.get('/sessionReport', connectEnsureLogin.ensureLoggedIn(), adminAccessControl, async (request, response) => {
         const user = request.user
         const sessions = await Sessions.getAvailableSessions()
         const activeSession = await Sessions.getNumberOfActiveSessions()
@@ -354,7 +364,7 @@ app.get('/sessionReport',
     })
 
     // render the displalyUsers.ejs file
-app.get('/displayUsers',async (request, response) => {
+app.get('/displayUsers',connectEnsureLogin.ensureLoggedIn(), adminAccessControl, async (request, response) => {
         const users = await UserAccount.getAllUsers()
         if (request.accepts('html')) {
             response.render('displayUsers', {
@@ -371,7 +381,7 @@ app.get('/displayUsers',async (request, response) => {
     })
 
 app.get('/newSport',
-    connectEnsureLogin.ensureLoggedIn(), (request, response) => {
+    connectEnsureLogin.ensureLoggedIn(), adminAccessControl, (request, response) => {
         if (request.accepts('html')) {
             response.render('newSport', {
                 title: 'newSport',
