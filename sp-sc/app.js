@@ -313,6 +313,7 @@ app.post('/newSession', async (request, response) => {
 
 app.get('/sessionReport',
     connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
+        const user = request.user
         const sessions = await Sessions.getAvailableSessions()
         const activeSession = await Sessions.getNumberOfActiveSessions()
         const inactveSession = await Sessions.getNumberOfInactiveSessions()
@@ -321,6 +322,7 @@ app.get('/sessionReport',
         const futureSessions = await Sessions.getFutureSessions()
         const pastSessions = await Sessions.getPassedSessions()
         const todaySessions = await Sessions.getTodaySessions()
+        console.log('this is the user', user.email)
 
         if (request.accepts('html')) {
             response.render('sessionReport', {
@@ -333,6 +335,7 @@ app.get('/sessionReport',
                 futureSessions: futureSessions,
                 pastSessions: pastSessions,
                 todaySessions: todaySessions,
+                user: user,
                 csrfToken: request.csrfToken()
 
             })
@@ -379,6 +382,12 @@ app.get('/newSport',
 // add new sport to the database
 app.post('/newSport', async (request, response) => {
     // here we will add a row of sport to sports table
+    const validSports = ["football", "basketball", "cricket", "soccer", "volleyball", "swimming", "boxing", "baseball", "golf", "rugby"];
+    const sport = request.body.sport
+    if (!validSports.includes(sport)) {
+        return res.status(400).send("Invalid sport selected");
+  }
+
     try {
         const sport = await Sessions.addSession({
             sport: request.body.sport,
