@@ -284,6 +284,12 @@ app.post('/newSession', async (request, response) => {
         request.flash('error', 'Please fill all the fields')
         return response.redirect('/newSession/' + sport)
     } 
+    // add regex for the name to be atleast 3 characters and should contain letters
+    const nameRegex = /^[a-zA-Z]{3,}$/;
+    if (!nameRegex.test(playerName)) {
+        request.flash('error', 'Please enter a valid player name')
+        return response.redirect('/newSession/' + sport)
+    }
     const count = playerName.split(',')
     // get the user Id of the session creator 
     const userId = request.user.id
