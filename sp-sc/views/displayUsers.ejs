@@ -21,19 +21,24 @@
         <%
         let countA = 0;
         let countU = 0;
+        let countS = 0;
         users.forEach(user => {
           if (user.role === 'admin') {
             countA++;
+          }
+          else if(user.role === 'superadmin'){
+            countS++
           } else{
             countU++;
           }
         }); 
         %>
         <h2 class="text-xl text-gray-600 font-bold mb-4">Admins List
-          <span id="count-admin" class="border boarder-gray-300 rounded px-2 py-1 ml-2 text-sm text-gray-600 bg-purple-50"><%= countA %>
+          <span id="count-admin" class="border boarder-gray-300 rounded px-2 py-1 ml-2 text-sm text-gray-600 bg-purple-50">A: <%= countA %>
+        </span></h2><span id="count-admin" class="border boarder-gray-300 rounded px-2 py-1 ml-2 text-sm text-gray-600 bg-purple-50">S: <%= countS %>
         </span></h2>
         <% users.forEach(admin => { %>
-          <% if (admin.role === 'admin') { %>
+          <% if (admin.role === 'admin' || admin.role === 'superadmin') { %>
           <div class="flex justify-between items-center mb-2">
             <span class="text-gray-900 font-medium"><%= admin.firstName %></span>
             <span class="text-gray-600"><%= admin.email %></span>

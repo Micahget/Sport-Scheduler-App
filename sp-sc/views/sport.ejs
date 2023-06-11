@@ -21,6 +21,10 @@
           <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">View
             Detail
           </th>
+          <% if(user.role=== 'superadmin' ) { %>
+          <th class="text-left py-3 px-4 uppercase font-semibold text-sm border-b border-gray-600 bg-gray-100">Created by:
+          </th>
+          <% } %>
 
         </tr>
       </thead>
@@ -56,6 +60,17 @@
                     View
                   </button></a>
             </td>
+          
+            <%  if(user.role=== 'superadmin' ) { 
+            allUsers.forEach(user=> { 
+              // display the username who created the session in which who ahve the same id as the session.userId
+              if (user.id === session.userId) { %>
+            <td class="py-3 px-4 text-sm border-b border-gray-600">
+              Name: <%= user.firstName %>
+              <br>
+              Email: <%= user.email %>
+            </td>
+            <% } }) } %>
           </tr>
           <% } }); %>
       </tbody>

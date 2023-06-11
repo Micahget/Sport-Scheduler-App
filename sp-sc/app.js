@@ -131,7 +131,8 @@ passport.deserializeUser(function (id, done) {
 const adminAccessControl = async (request, response, next) => {
     const user = await UserAccount.findOne({ where: { email: request.user.email } })
     console.log("this is the user", user, "this is the user role", user.role)
-    if (user.role === 'admin') {
+    // if the user role is admin or super admin then allow the user to access the page
+    if (user.role === 'admin' || user.role === 'superadmin') {
         return next()
     }
     response.redirect('/login')
@@ -181,8 +182,9 @@ app.post("/users", async function (request, response) {
         return response.redirect("/users");
     }
     const adminPassCode = 'admin'
+    const superAdminPassCode = 'bosssuperadmin'
     const adminPass = request.body.adminPass
-    const role = adminPass === adminPassCode ? 'admin' : 'user'
+    const role = adminPass === adminPassCode ? 'admin' : adminPass === superAdminPassCode ? 'superadmin' : 'user'
     console.log("First Name", request.body.firstName)
     try {
         const user = await UserAccount.create({
@@ -401,7 +403,8 @@ app.post('/newSport', async (request, response) => {
     const validSports = ["football", "basketball", "cricket", "soccer", "volleyball", "swimming", "boxing", "baseball", "golf", "rugby"];
     const sport = request.body.sport
     if (!validSports.includes(sport)) {
-        return res.status(400).send("Invalid sport selected");
+        response.status(400).send("Invalid sport selected");
+        return response.redirect('/scheduler')
   }
 
     try {
@@ -420,12 +423,15 @@ app.post('/newSport', async (request, response) => {
 app.get('/sports/:sport',
     connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
         const sport = request.params.sport
+        const allUsers = await UserAccount.getAllUsers()
         // get active Sessions of the sport
         const activeSession = await Sessions.getActiveSessions(sport)
         const passedSession = await Sessions.getPastSessions(sport)
         const user = request.user
         const userSession = await Sessions.getSessionsByUserId(user.id, sport)
         const inactiveSession = await Sessions.getInactiveSessions(sport)
+        console.log('this is the user', user)
+        
 
         if (request.accepts('html')) {
             response.render('sports', {
@@ -433,9 +439,10 @@ app.get('/sports/:sport',
                 sport: sport,
                 activeSession: activeSession,
                 passedSession: passedSession,
-                User: user,
+                user: user,
                 userSession: userSession,
                 inactiveSession: inactiveSession,
+                allUsers: allUsers,
                 csrfToken: request.csrfToken()
             })
         } else {
@@ -451,10 +458,10 @@ app.get('/sports/:sport',
     })
 
 // lets render sport.ejs file with csrf token
-app.get('/sports',
-    connectEnsureLogin.ensureLoggedIn(), (request, response) => {
-        response.render('sports', { title: 'sports', csrfToken: request.csrfToken() })
-    })
+// app.get('/sports',
+//     connectEnsureLogin.ensureLoggedIn(), (request, response) => {
+//         response.render('sports', { title: 'sports', csrfToken: request.csrfToken() })
+//     })
 
 
 //delete a sport from the database whcih will delete every session which have same sport name

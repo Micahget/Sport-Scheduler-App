@@ -105,7 +105,7 @@
       <a href="/scheduler">
         <h1 class="text-3xl font-bold text-gray-800 mb-6">Session Details</h1>
       </a>
-      <% if(session.id===User.id || User.role==='admin' ) { %>
+      <% if(session.id===User.id || User.role==='admin' || 'superadmin' ) { %>
 
         <div class="flex items-center space-x-2">
           <% if(session.active) { %>
@@ -150,7 +150,7 @@
                   <% } %>
                     <% console.log("player: " + arrayOfPlayers[i]) %>
                   <!--the button is to delete the player from the session-->
-                 <% if(session.userId === User.id || User.role === 'admin' ) { %>
+                 <% if(session.userId === User.id || User.role === 'admin' || User.role === 'superadmin' ) { %>
                   <button class=" hover:text-red-600 outline-none focus:outline-none"
                       onclick=" deletePlayer('<%=session.id %>', '<%= arrayOfPlayers[i] %>', '<%= session.playerName %>')">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
