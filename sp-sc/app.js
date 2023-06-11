@@ -419,8 +419,7 @@ app.post('/newSport', async (request, response) => {
     const validSports = ["football", "basketball", "cricket", "soccer", "volleyball", "swimming", "boxing", "baseball", "golf", "rugby"];
     const sport = request.body.sport
     if (!validSports.includes(sport)) {
-        response.status(400).send("Invalid sport selected");
-        return response.redirect('/error')
+        return response.status(400).redirect('/error')
   }
 
     try {
