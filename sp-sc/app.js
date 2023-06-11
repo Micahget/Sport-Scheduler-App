@@ -420,7 +420,7 @@ app.post('/newSport', async (request, response) => {
     const sport = request.body.sport
     if (!validSports.includes(sport)) {
         response.status(400).send("Invalid sport selected");
-        return response.redirect('/scheduler')
+        return response.redirect('/error')
   }
 
     try {
@@ -431,7 +431,8 @@ app.post('/newSport', async (request, response) => {
         return response.redirect('/scheduler')
     }
     catch (error) {
-        console.log(error)
+        // display error page
+        return response.redirect('/error')
     }
 })
 
