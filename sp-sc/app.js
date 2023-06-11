@@ -147,6 +147,22 @@ app.get("/", async (request, response) => {
     });
 });
 
+// Handle CSRF token errors
+app.use((error, request, response, next) => {
+    if (error && error.code === 'EBADCSRFTOKEN') {
+      response.redirect('/error');
+    } else {
+      next(error);
+    }
+  });
+
+// render error page
+app.get("/error", async (request, response) => {
+    response.render("errorPage", {
+        title: "Error",
+    });
+});
+
 // *********************************SignUp and SignOut*********************************************
 // render the login page
 app.get("/signup", function (request, response) {
